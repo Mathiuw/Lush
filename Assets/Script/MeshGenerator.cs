@@ -11,7 +11,7 @@ public class MeshGenerator : MonoBehaviour
 
     [SerializeField] int xSize = 20, zSize = 20;
 
-    private void Awake()
+    private void Start()
     {
         mesh = new Mesh();
         GetComponent<MeshFilter>().mesh = mesh;
