@@ -210,6 +210,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   voxel: {fileID: 7767093171043205750, guid: 6d23d1f6c97c05340911854bfb8c7086, type: 3}
+  worldSizeX: 20
+  worldSizeY: 20
+  noiseHeight: 5
+  detailScale: 8
+  gridOffset: 1
+  scatterTrees: 1
+  tree: {fileID: 6472695018467320297, guid: 671e94efaf55c054eaf75765e8bda21b, type: 3}
+  amountPerChunk: 30
 --- !u!4 &1232158653
 Transform:
   m_ObjectHideFlags: 0
