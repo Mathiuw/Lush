@@ -1,15 +1,27 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class VoxelGenerator : MonoBehaviour
 {
+    [SerializeField] Transform player;
+    Vector3 startPosition = Vector3.zero;
+    Hashtable blockContainer = new Hashtable();
+
+    private int xPlayerMove => (int)(player.position.x - startPosition.x);
+
+    private int zPlayerMove => (int)(player.position.z - startPosition.z);
+
+    private int xPlayerLocation => (int)Mathf.Floor(player.position.x);
+
+    private int zPlayerLocation => (int)Mathf.Floor(player.position.z);
+
+
     [Header("Terrain")]
     [SerializeField] GameObject voxel;
-    [SerializeField] int worldSizeX = 20;
-    [SerializeField] int worldSizeY = 20;
+    [SerializeField] int chunkSize = 20;
     [SerializeField] int noiseHeight = 5;
     [SerializeField] float detailScale = 8;
-    [SerializeField] float gridOffset = 1.0f;
 
     [Header("Trees")]
     [SerializeField] bool scatterTrees = true;
@@ -17,25 +29,49 @@ public class VoxelGenerator : MonoBehaviour
     [SerializeField] int amountPerChunk = 20;
 
     List<Vector3> blockPositions = new List<Vector3>();
-
+    
     private void Start()
     {
-        for (int x = 0; x < worldSizeX; x++)
+        GenerateTerrain();
+
+        if (scatterTrees)
         {
-            for (int z = 0; z < worldSizeY; z++)
+            SpawnTrees();
+        }
+    }
+
+    private void Update()
+    {
+        if (Mathf.Abs(xPlayerMove) >= 1 || Mathf.Abs(zPlayerMove) >= 1)
+        {
+            GenerateTerrain();
+        }
+    }
+
+    private void GenerateTerrain() 
+    {
+        for (int x = -chunkSize; x < chunkSize; x++)
+        {
+            for (int z = -chunkSize; z < chunkSize; z++)
             {
                 // Voxel block position
-                Vector3 pos = new Vector3(x * gridOffset, GenerateNoise(x, z, detailScale) * noiseHeight, z * gridOffset);
+                Vector3 position = new Vector3(x + xPlayerLocation,
+                    GenerateNoise(x + xPlayerLocation, z + zPlayerLocation, detailScale) * noiseHeight,
+                    z + zPlayerLocation);
 
-                // Instantiate voxel block
-                GameObject block = Instantiate(voxel, pos, Quaternion.identity, transform);
+                if (!blockContainer.ContainsKey(position))
+                {
+                    // Instantiate voxel block
+                    GameObject block = Instantiate(voxel, position, Quaternion.identity, transform);
 
-                // Add block position to positions list
-                blockPositions.Add(block.transform.position);
+                    // Add block to hashtable
+                    blockContainer.Add(position, block);
+
+                    // Add block position to positions list
+                    blockPositions.Add(block.transform.position);
+                }
             }
         }
-
-        SpawnTrees();
     }
 
     private void SpawnTrees() 
@@ -67,5 +103,4 @@ public class VoxelGenerator : MonoBehaviour
 
         return Mathf.PerlinNoise(noiseX, noiseZ);        
     }
-
 }
