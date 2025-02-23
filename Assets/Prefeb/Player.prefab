@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3753879737632772397}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Head_Pivot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -44,7 +44,7 @@ GameObject:
   - component: {fileID: 6389784600463421994}
   - component: {fileID: 4597256278287293166}
   - component: {fileID: 6970269573086724704}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Camera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -180,7 +180,7 @@ GameObject:
   - component: {fileID: 3852601136022599869}
   - component: {fileID: 7316640809132854529}
   - component: {fileID: 8468112951058737281}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -266,7 +266,7 @@ GameObject:
   - component: {fileID: 4685878241686608680}
   - component: {fileID: 6847802009554189288}
   - component: {fileID: 8601038493293573819}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -327,6 +327,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3bec91fbe4167743af5fef78a17757f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 10
-  mouseSensibility: 0.1
+  speed: 10
+  gravity: -20
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 1
+  sphereRadius: 0.2
+  sphereOffset: 0.03
+  sensibility: 20
   headPivot: {fileID: 3753879737632772397}

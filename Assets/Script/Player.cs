@@ -9,23 +9,29 @@ public class Player : MonoBehaviour
 
     // Player movement variables
     [Header("Player Movement")]
-    [SerializeField] float moveSpeed = 5f;
+    [SerializeField] float speed = 5f;
+    [SerializeField] float gravity = -9.81f;
     CharacterController characterController;
     Vector2 MoveInput = Vector2.zero;
     Vector3 MoveDirection = Vector3.zero;
+    Vector3 gravityVelocity = Vector3.zero;
+
+    [Header("Ground Check")]
+    [SerializeField] LayerMask groundMask;
+    [SerializeField] float sphereRadius = 0.2f;
+    [SerializeField] float sphereOffset = 0f;
 
     // Camera movement variables
     [Header("Camera Movement")]
-    [SerializeField] float mouseSensibility = 5f;
+    [SerializeField] float sensibility = 20f;
     [SerializeField] Transform headPivot;
     Transform playerCamera;
     Vector2 lookInput = Vector2.zero;
-    Vector2 lookRotation = Vector2.zero;
+    float xlookRotation = 0f;
 
     private void Awake()
     {
         // Lock Cursor
-        Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
 
         // Get camera transform
@@ -108,40 +114,43 @@ public class Player : MonoBehaviour
 
     private void PlayerMovement() 
     {
-        MoveDirection = playerCamera.forward * MoveInput.y + playerCamera.right * MoveInput.x;
+        // Movement
+        MoveDirection = transform.forward * MoveInput.y + transform.right * MoveInput.x;
+
+        characterController.Move(MoveDirection.normalized * speed * Time.deltaTime);
 
         // Gravity
-        if (!characterController.isGrounded)
+        if (!Physics.CheckSphere(transform.position + Vector3.down + Vector3.up * sphereOffset, sphereRadius, groundMask))
         {
-            MoveDirection.y += Physics.gravity.y;
+            gravityVelocity.y += gravity * Time.deltaTime;
         }
-        else if (characterController.isGrounded && MoveDirection.y != 0)
+        else
         {
-            MoveDirection.y = 0;
+            gravityVelocity.y = -2;
         }
 
-        characterController.Move(MoveDirection.normalized * moveSpeed * Time.deltaTime);
+        characterController.Move(gravityVelocity * Time.deltaTime);
     }
 
     private void CameraMovement()
     {
-        float mouseX = lookInput.x * mouseSensibility;
-        float mouseY = lookInput.y * mouseSensibility;
+        float mouseX = lookInput.x * sensibility * Time.deltaTime;
+        float mouseY = lookInput.y * sensibility * Time.deltaTime;
 
-        lookRotation.x -= mouseY;
-        lookRotation.y = playerCamera.rotation.eulerAngles.y + mouseX;
+        xlookRotation -= mouseY;
 
         // Clamp x rotation value
-        lookRotation.x = Math.Clamp(lookRotation.x, -89, 89);
+        xlookRotation = Math.Clamp(xlookRotation, -89, 89);
 
-        playerCamera.rotation = Quaternion.Euler(lookRotation.x, lookRotation.y, 0);
+        transform.Rotate(Vector3.up * mouseX);
+        playerCamera.localRotation = Quaternion.Euler(xlookRotation, 0, 0);
     }
 
     // DEBUG gizmos draw
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.blue;
-        Gizmos.DrawLine(transform.position, new Vector3(transform.position.x, transform.position.y + MoveDirection.y, transform.position.z));
+        Gizmos.DrawWireSphere(transform.position + Vector3.down + Vector3.up * sphereOffset, sphereRadius);
 
         Gizmos.color = Color.red;
         Gizmos.DrawLine(transform.position, new Vector3(transform.position.x + MoveDirection.x, transform.position.y, transform.position.z + MoveDirection.z));
