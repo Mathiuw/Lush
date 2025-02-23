@@ -6,7 +6,7 @@ public class VoxelGenerator : MonoBehaviour
 {
     [SerializeField] Transform player;
     Vector3 startPosition = Vector3.zero;
-    Hashtable blockContainer = new Hashtable();
+    Hashtable voxelPositions = new Hashtable();
 
     private int xPlayerMove => (int)(player.position.x - startPosition.x);
 
@@ -15,7 +15,6 @@ public class VoxelGenerator : MonoBehaviour
     private int xPlayerLocation => (int)Mathf.Floor(player.position.x);
 
     private int zPlayerLocation => (int)Mathf.Floor(player.position.z);
-
 
     [Header("Terrain")]
     [SerializeField] GameObject voxel;
@@ -28,7 +27,7 @@ public class VoxelGenerator : MonoBehaviour
     [SerializeField] GameObject tree;
     [SerializeField] int amountPerChunk = 20;
 
-    List<Vector3> blockPositions = new List<Vector3>();
+    List<Vector3> treeVoxelPositions = new List<Vector3>();
     
     private void Start()
     {
@@ -50,6 +49,9 @@ public class VoxelGenerator : MonoBehaviour
 
     private void GenerateTerrain() 
     {
+        Hashtable newTiles = new Hashtable();
+        float cTime = Time.realtimeSinceStartup;
+
         for (int x = -chunkSize; x < chunkSize; x++)
         {
             for (int z = -chunkSize; z < chunkSize; z++)
@@ -59,19 +61,40 @@ public class VoxelGenerator : MonoBehaviour
                     GenerateNoise(x + xPlayerLocation, z + zPlayerLocation, detailScale) * noiseHeight,
                     z + zPlayerLocation);
 
-                if (!blockContainer.ContainsKey(position))
+                if (!voxelPositions.ContainsKey(position))
                 {
                     // Instantiate voxel block
                     GameObject block = Instantiate(voxel, position, Quaternion.identity, transform);
 
+                    Tile tile = new Tile(cTime, block);
+
                     // Add block to hashtable
-                    blockContainer.Add(position, block);
+                    voxelPositions.Add(position, tile);
 
                     // Add block position to positions list
-                    blockPositions.Add(block.transform.position);
+                    treeVoxelPositions.Add(block.transform.position);
+                }
+                else
+                {
+                    ((Tile)voxelPositions[position]).cTimeStamp = cTime;
                 }
             }
         }
+
+        foreach (Tile tile in voxelPositions.Values)
+        {
+            if (!tile.cTimeStamp.Equals(cTime))
+            {
+                Destroy(tile.tileObject);
+            }
+            else
+            {
+                newTiles.Add(tile.tileObject, tile);
+            }
+        }
+
+        voxelPositions = newTiles;
+        startPosition = player.transform.position;
     }
 
     private void SpawnTrees() 
@@ -84,14 +107,14 @@ public class VoxelGenerator : MonoBehaviour
 
     private Vector3 GenerateTreeSpawnLocation()
     {
-        int randomIndex = Random.Range(0, blockPositions.Count);
+        int randomIndex = Random.Range(0, treeVoxelPositions.Count);
 
         Vector3 newPos = new Vector3(
-            blockPositions[randomIndex].x,
-            blockPositions[randomIndex].y + 0.5f,
-            blockPositions[randomIndex].z
+            treeVoxelPositions[randomIndex].x,
+            treeVoxelPositions[randomIndex].y + 0.5f,
+            treeVoxelPositions[randomIndex].z
         );
-        blockPositions.RemoveAt(randomIndex);
+        treeVoxelPositions.RemoveAt(randomIndex);
 
         return newPos;
     }
@@ -102,5 +125,17 @@ public class VoxelGenerator : MonoBehaviour
         float noiseZ = (z + transform.position.z) / detailScale;
 
         return Mathf.PerlinNoise(noiseX, noiseZ);        
+    }
+
+    private class Tile 
+    {
+        public float cTimeStamp;
+        public GameObject tileObject;
+
+        public Tile(float cTimeStamp, GameObject tileObject)
+        {
+            this.cTimeStamp = cTimeStamp;
+            this.tileObject = tileObject;
+        }
     }
 }
