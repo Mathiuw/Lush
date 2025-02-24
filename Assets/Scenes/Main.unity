@@ -211,12 +211,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 853822549}
-  drawDistance: 15
-  voxel: {fileID: 9201598022883144477, guid: 7f00e8a8236619f42b59d7f1f99b5d2e, type: 3}
-  worldSize: 2
+  showGizmos: 0
+  oneTimeGeneration: 1
+  chunk: {fileID: 9201598022883144477, guid: 7f00e8a8236619f42b59d7f1f99b5d2e, type: 3}
+  worldSize: 5
+  chunkSize: 10
   noiseHeight: 5
-  detailScale: 8
-  chunkSize: 20
+  detailScale: 10
   scatterTrees: 0
   tree: {fileID: 6472695018467320297, guid: 671e94efaf55c054eaf75765e8bda21b, type: 3}
   amountPerChunk: 30

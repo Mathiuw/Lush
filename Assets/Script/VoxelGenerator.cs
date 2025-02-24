@@ -6,31 +6,34 @@ public class VoxelGenerator : MonoBehaviour
 {
     [SerializeField] Transform player;
     Vector3 startPosition = Vector3.zero;
-    Hashtable voxelPositions = new Hashtable();
+    Hashtable chunkPositions = new Hashtable();
 
-    private int xPlayerMove => (int)(player.position.x - startPosition.x);
+    private int xPlayerMoved => (int)(player.position.x - startPosition.x);
 
-    private int zPlayerMove => (int)(player.position.z - startPosition.z);
+    private int zPlayerMoved => (int)(player.position.z - startPosition.z);
 
-    private int xPlayerLocation => (int)Mathf.Floor(player.position.x);
+    public int xPlayerLocation => (int)Mathf.Floor(player.position.x);
 
-    private int zPlayerLocation => (int)Mathf.Floor(player.position.z);
+    public int zPlayerLocation => (int)Mathf.Floor(player.position.z);
+
+    [SerializeField] bool showGizmos = false;
 
     [Header("Terrain")]
-    [SerializeField] GameObject voxel;
-    [SerializeField] int worldSize = 20;
-    [SerializeField] int noiseHeight = 5;
-    [SerializeField] float detailScale = 8;
+    [SerializeField] bool oneTimeGeneration = false;
+    [SerializeField] GameObject chunk;
+    [SerializeField] int worldSize = 4;
 
     [Header("Chunk")]
     [SerializeField] int chunkSize = 20;
+    [SerializeField] public int noiseHeight = 5;
+    [SerializeField] public float detailScale = 8;
 
     [Header("Trees")]
     [SerializeField] bool scatterTrees = true;
     [SerializeField] GameObject tree;
     [SerializeField] int amountPerChunk = 20;
 
-    List<Vector3> treeVoxelPositions = new List<Vector3>();
+    List<Vector3> treeChunkPositions = new List<Vector3>();
     
     private void Start()
     {
@@ -44,7 +47,9 @@ public class VoxelGenerator : MonoBehaviour
 
     private void Update()
     {
-        if (Mathf.Abs(xPlayerMove) >= chunkSize || Mathf.Abs(zPlayerMove) >= chunkSize)
+        if (oneTimeGeneration) return;
+
+        if (Mathf.Abs(xPlayerMoved) >= chunkSize || Mathf.Abs(zPlayerMoved) >= chunkSize)
         {
             GenerateTerrain();
         }
@@ -59,44 +64,42 @@ public class VoxelGenerator : MonoBehaviour
         {
             for (int z = -worldSize; z < worldSize; z++)
             {
-                // Voxel block position
-                Vector3 position = new Vector3((x * chunkSize) + xPlayerLocation,
-                   /* GenerateNoise(x + xPlayerLocation, z + zPlayerLocation, detailScale) * noiseHeight*/0,
-                    (z * chunkSize) + zPlayerLocation);
+                // chunk position
+                Vector3 position = new Vector3((x * chunkSize) + xPlayerLocation, 0, (z * chunkSize) + zPlayerLocation);
 
-                if (!voxelPositions.ContainsKey(position))
+                if (!chunkPositions.ContainsKey(position))
                 {
-                    // Instantiate voxel block
-                    GameObject block = Instantiate(voxel, position, Quaternion.identity, transform);
+                    // Instantiate chunk game object
+                    GameObject block = Instantiate(this.chunk, position, Quaternion.identity, transform);
 
-                    Tile tile = new Tile(cTime, block);
+                    Chunk chunk = new Chunk(cTime, block, chunkSize, this);
 
-                    // Add block to hashtable
-                    voxelPositions.Add(position, tile);
+                    // Add chunk to hashtable
+                    chunkPositions.Add(position, chunk);
 
-                    // Add block position to positions list
-                    treeVoxelPositions.Add(block.transform.position);
+                    // Add chunk position to positions list
+                    //treeChunkPositions.Add(block.transform.position);
                 }
                 else
                 {
-                    ((Tile)voxelPositions[position]).cTimeStamp = cTime;
+                    ((Chunk)chunkPositions[position]).cTimeStamp = cTime;
                 }
             }
         }
 
-        foreach (Tile tile in voxelPositions.Values)
+        foreach (Chunk chunk in chunkPositions.Values)
         {
-            if (!tile.cTimeStamp.Equals(cTime))
+            if (!chunk.cTimeStamp.Equals(cTime))
             {
-                Destroy(tile.tileObject);
+                Destroy(chunk.chunkObject);
             }
             else
             {
-                newTiles.Add(tile.tileObject, tile);
+                newTiles.Add(chunk.chunkObject, chunk);
             }
         }
 
-        voxelPositions = newTiles;
+        chunkPositions = newTiles;
         startPosition = player.transform.position;
     }
 
@@ -110,35 +113,104 @@ public class VoxelGenerator : MonoBehaviour
 
     private Vector3 GenerateTreeSpawnLocation()
     {
-        int randomIndex = Random.Range(0, treeVoxelPositions.Count);
+        int randomIndex = Random.Range(0, treeChunkPositions.Count);
 
         Vector3 newPos = new Vector3(
-            treeVoxelPositions[randomIndex].x,
-            treeVoxelPositions[randomIndex].y + 0.5f,
-            treeVoxelPositions[randomIndex].z
+            treeChunkPositions[randomIndex].x,
+            treeChunkPositions[randomIndex].y + 0.5f,
+            treeChunkPositions[randomIndex].z
         );
-        treeVoxelPositions.RemoveAt(randomIndex);
+        treeChunkPositions.RemoveAt(randomIndex);
 
         return newPos;
     }
 
-    private float GenerateNoise(int x, int z, float detailScale) 
-    {
-        float noiseX = (x + transform.position.x) / detailScale;
-        float noiseZ = (z + transform.position.z) / detailScale;
-
-        return Mathf.PerlinNoise(noiseX, noiseZ);        
-    }
-
-    private class Tile 
+    private class Chunk 
     {
         public float cTimeStamp;
-        public GameObject tileObject;
+        public GameObject chunkObject;
+        VoxelGenerator voxelGenerator;
+        Mesh mesh;
 
-        public Tile(float cTimeStamp, GameObject tileObject)
+        int size;
+
+        public Chunk(float cTimeStamp, GameObject chunkObject, int size, VoxelGenerator voxelGenerator)
         {
             this.cTimeStamp = cTimeStamp;
-            this.tileObject = tileObject;
+            this.chunkObject = chunkObject;
+            this.size = size;
+            this.voxelGenerator = voxelGenerator;
+
+            mesh = new Mesh();
+            chunkObject.GetComponent<MeshFilter>().mesh = mesh;
+
+            CreateMesh();
+
+            chunkObject.GetComponent<MeshCollider>().sharedMesh = mesh;
+        }
+
+        private void CreateMesh()
+        {
+            Vector3[] vertices = new Vector3[(size + 1) * (size + 1)];
+            int[] triangles = new int[size * size * 6];
+            Vector2[] uv = new Vector2[vertices.Length];
+
+            // Create mesh vertices
+            for (int i = 0, z = 0; z <= size; z++)
+            {
+                for (int x = 0; x <= size; x++)
+                {
+                    float y = GenerateNoise(x /*+ voxelGenerator.xPlayerLocation*/, z /*+ voxelGenerator.zPlayerLocation*/, voxelGenerator.detailScale) * voxelGenerator.noiseHeight; //Mathf.PerlinNoise(x * 0.3f, z * 0.3f) * 1.25f;
+                    vertices[i] = new Vector3(x, y, z);
+                    i++;
+                }
+            }
+
+            // Create UV for mesh
+            for (int i = 0; i < uv.Length; i++)
+            {
+                uv[i] = new Vector2(vertices[i].x, vertices[i].z);
+            }
+
+            // Set mesh triangles
+            int vert = 0;
+            int tris = 0;
+
+            for (int z = 0; z < size; z++)
+            {
+                for (int x = 0; x < size; x++)
+                {
+                    triangles[tris + 0] = vert + 0;
+                    triangles[tris + 1] = vert + size + 1;
+                    triangles[tris + 2] = vert + 1;
+                    triangles[tris + 3] = vert + 1;
+                    triangles[tris + 4] = vert + size + 1;
+                    triangles[tris + 5] = vert + size + 2;
+
+                    vert++;
+                    tris += 6;
+                }
+                vert++;
+            }
+
+            // Update mesh
+            mesh.Clear();
+
+            mesh.vertices = vertices;
+            mesh.triangles = triangles;
+            mesh.uv = uv;
+
+            mesh.RecalculateNormals();
+            mesh.RecalculateBounds();
+            mesh.Optimize();
+        }
+
+        private float GenerateNoise(int x, int z, float detailScale)
+        {
+            float noiseX = (x + chunkObject.transform.position.x) / detailScale;
+            float noiseZ = (z + chunkObject.transform.position.z) / detailScale;
+
+            return Mathf.PerlinNoise(noiseX, noiseZ);
         }
     }
 }

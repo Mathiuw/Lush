@@ -4,11 +4,6 @@ using UnityEngine;
 public class MeshGenerator : MonoBehaviour
 {
     Mesh mesh;
-
-    Vector3[] vertices;
-    int[] triangles;
-    Vector2[] uv;
-
     [SerializeField] int size = 20;
     [SerializeField] bool showGizmos = false;
 
@@ -18,34 +13,34 @@ public class MeshGenerator : MonoBehaviour
         GetComponent<MeshFilter>().mesh = mesh;
 
         CreateShape();
-        UpdateMesh();
 
         GetComponent<MeshCollider>().sharedMesh = mesh;
     }
 
     private void CreateShape() 
     {
-        vertices = new Vector3[(size + 1) * (size + 1)];
+        Vector3[] vertices = new Vector3[(size + 1) * (size + 1)];
+        int[] triangles = new int[size * size * 6];
+        Vector2[] uv = new Vector2[vertices.Length];
 
+        // Create mesh vertices
         for (int i = 0, z = 0; z <= size; z++)
         {
             for (int x = 0; x <= size; x++)
             {
                 float y = Mathf.PerlinNoise(x * 0.3f, z * 0.3f) * 1.25f;
-                vertices[i] = new Vector3(x, 0, z);
+                vertices[i] = new Vector3(x, y, z);
                 i++;
             }
         }
 
-        uv = new Vector2[vertices.Length];
-
+        // Create UV for mesh
         for (int i = 0; i < uv.Length; i++)
         {
             uv[i] = new Vector2(vertices[i].x, vertices[i].z);
         }
 
-        triangles = new int[size * size * 6];
-
+        // Set mesh triangles
         int vert = 0;
         int tris = 0;
 
@@ -65,10 +60,8 @@ public class MeshGenerator : MonoBehaviour
             }
             vert++;
         }
-    }
 
-    private void UpdateMesh()
-    {
+        // Update mesh
         mesh.Clear();
 
         mesh.vertices = vertices;
@@ -84,11 +77,11 @@ public class MeshGenerator : MonoBehaviour
     {
         if (showGizmos)
         {
-            if (vertices == null) return;
+            if (mesh.vertices == null) return;
 
-            for (int i = 0; i < vertices.Length; i++)
+            for (int i = 0; i < mesh.vertices.Length; i++)
             {
-                Gizmos.DrawSphere(vertices[i], 0.01f);
+                Gizmos.DrawSphere(mesh.vertices[i], 0.01f);
             }
         }
     }
