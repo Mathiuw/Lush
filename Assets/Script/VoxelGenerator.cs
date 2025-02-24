@@ -18,9 +18,12 @@ public class VoxelGenerator : MonoBehaviour
 
     [Header("Terrain")]
     [SerializeField] GameObject voxel;
-    [SerializeField] int chunkSize = 20;
+    [SerializeField] int worldSize = 20;
     [SerializeField] int noiseHeight = 5;
     [SerializeField] float detailScale = 8;
+
+    [Header("Chunk")]
+    [SerializeField] int chunkSize = 20;
 
     [Header("Trees")]
     [SerializeField] bool scatterTrees = true;
@@ -41,7 +44,7 @@ public class VoxelGenerator : MonoBehaviour
 
     private void Update()
     {
-        if (Mathf.Abs(xPlayerMove) >= 1 || Mathf.Abs(zPlayerMove) >= 1)
+        if (Mathf.Abs(xPlayerMove) >= chunkSize || Mathf.Abs(zPlayerMove) >= chunkSize)
         {
             GenerateTerrain();
         }
@@ -52,14 +55,14 @@ public class VoxelGenerator : MonoBehaviour
         Hashtable newTiles = new Hashtable();
         float cTime = Time.realtimeSinceStartup;
 
-        for (int x = -chunkSize; x < chunkSize; x++)
+        for (int x = -worldSize; x < worldSize; x++)
         {
-            for (int z = -chunkSize; z < chunkSize; z++)
+            for (int z = -worldSize; z < worldSize; z++)
             {
                 // Voxel block position
-                Vector3 position = new Vector3(x + xPlayerLocation,
-                    GenerateNoise(x + xPlayerLocation, z + zPlayerLocation, detailScale) * noiseHeight,
-                    z + zPlayerLocation);
+                Vector3 position = new Vector3((x * chunkSize) + xPlayerLocation,
+                   /* GenerateNoise(x + xPlayerLocation, z + zPlayerLocation, detailScale) * noiseHeight*/0,
+                    (z * chunkSize) + zPlayerLocation);
 
                 if (!voxelPositions.ContainsKey(position))
                 {
