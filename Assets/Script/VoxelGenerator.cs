@@ -22,6 +22,7 @@ public class VoxelGenerator : MonoBehaviour
     [SerializeField] bool oneTimeGeneration = false;
     [SerializeField] GameObject chunk;
     [SerializeField] int worldSize = 4;
+    Grid grid;
 
     [Header("Chunk")]
     [SerializeField] int chunkSize = 20;
@@ -34,9 +35,12 @@ public class VoxelGenerator : MonoBehaviour
     [SerializeField] int amountPerChunk = 20;
 
     List<Vector3> treeChunkPositions = new List<Vector3>();
-    
-    private void Start()
+
+    private void Awake()
     {
+        grid = GetComponent<Grid>();
+        grid.cellSize = new Vector3(chunkSize, chunkSize, chunkSize);
+
         GenerateTerrain();
 
         if (scatterTrees)
@@ -65,7 +69,9 @@ public class VoxelGenerator : MonoBehaviour
             for (int z = -worldSize; z < worldSize; z++)
             {
                 // chunk position
-                Vector3 position = new Vector3((x * chunkSize) + xPlayerLocation, 0, (z * chunkSize) + zPlayerLocation);
+                Vector3 position = new Vector3((x + grid.WorldToCell(player.position).x) * chunkSize,
+                                0,
+                                (z + grid.WorldToCell(player.position).z) * chunkSize);
 
                 if (!chunkPositions.ContainsKey(position))
                 {
@@ -123,6 +129,28 @@ public class VoxelGenerator : MonoBehaviour
         treeChunkPositions.RemoveAt(randomIndex);
 
         return newPos;
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (!grid || !showGizmos)
+        {
+            return;
+        }
+
+        for (int x = -worldSize; x < worldSize; x++)
+        {
+            for (int z = -worldSize; z < worldSize; z++)
+            {
+                // chunk position
+                Vector3 position = new Vector3((x + grid.WorldToCell(player.position).x) * chunkSize, 
+                                                0, 
+                                                (z + grid.WorldToCell(player.position).z) * chunkSize);
+
+                Gizmos.color = Color.red;
+                Gizmos.DrawSphere(position, 0.5f);
+            }
+        }       
     }
 
     private class Chunk 
