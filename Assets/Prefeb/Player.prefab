@@ -336,3 +336,6 @@ MonoBehaviour:
   sphereOffset: 0.03
   sensibility: 20
   headPivot: {fileID: 3753879737632772397}
+  headBob: 1
+  amplitude: 0.1
+  frequency: 2

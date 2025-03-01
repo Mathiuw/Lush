@@ -29,6 +29,12 @@ public class Player : MonoBehaviour
     Vector2 lookInput = Vector2.zero;
     float xlookRotation = 0f;
 
+    [Header("Head Bob")]
+    [SerializeField] bool headBob = true;
+    [SerializeField] float amplitude = 0.015f; 
+    [SerializeField] float frequency = 10f;
+    float bobTime = 0f;
+
     private void Awake()
     {
         // Lock Cursor
@@ -110,15 +116,21 @@ public class Player : MonoBehaviour
     {
         CameraMovement();
         PlayerMovement();
+
+        // Head bob
+        if (headBob)
+        {
+            Vector3 velocity = new Vector3(characterController.velocity.x, 0, characterController.velocity.z);
+
+            bobTime += velocity.magnitude * Time.deltaTime;
+            Debug.Log(bobTime);
+
+            playerCamera.localPosition = HeadBob(bobTime);
+        }
     }
 
     private void PlayerMovement() 
     {
-        // Movement
-        MoveDirection = transform.forward * MoveInput.y + transform.right * MoveInput.x;
-
-        characterController.Move(MoveDirection.normalized * speed * Time.deltaTime);
-
         // Gravity
         if (!Physics.CheckSphere(transform.position + Vector3.down + Vector3.up * sphereOffset, sphereRadius, groundMask))
         {
@@ -130,6 +142,11 @@ public class Player : MonoBehaviour
         }
 
         characterController.Move(gravityVelocity * Time.deltaTime);
+
+        // Movement
+        MoveDirection = transform.forward * MoveInput.y + transform.right * MoveInput.x;
+
+        characterController.Move(MoveDirection.normalized * speed * Time.deltaTime);
     }
 
     private void CameraMovement()
@@ -144,6 +161,14 @@ public class Player : MonoBehaviour
 
         transform.Rotate(Vector3.up * mouseX);
         playerCamera.localRotation = Quaternion.Euler(xlookRotation, 0, 0);
+    }
+
+    private Vector3 HeadBob(float time)
+    {
+        Vector3 position = Vector3.zero;
+        position.y += Mathf.Sin(time * frequency) * amplitude;
+        //position.x += Mathf.Cos(time * frequency / 2) * amplitude;
+        return position;
     }
 
     // DEBUG gizmos draw
