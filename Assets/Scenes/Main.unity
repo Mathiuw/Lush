@@ -278,7 +278,7 @@ GameObject:
   - component: {fileID: 1135715184}
   - component: {fileID: 1135715183}
   m_Layer: 5
-  m_Name: UI
+  m_Name: HUD
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -571,10 +571,6 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 853822549}
-    - target: {fileID: 4608035564676316432, guid: 9d4ebca2e57ede340b82e6b69f63432e, type: 3}
-      propertyPath: worldSize
-      value: 3
-      objectReference: {fileID: 0}
     - target: {fileID: 4789399867540370516, guid: 9d4ebca2e57ede340b82e6b69f63432e, type: 3}
       propertyPath: m_Name
       value: World

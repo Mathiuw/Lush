@@ -31,8 +31,8 @@ public class Player : MonoBehaviour
 
     [Header("Head Bob")]
     [SerializeField] bool headBob = true;
-    [SerializeField] float amplitude = 0.015f; 
-    [SerializeField] float frequency = 10f;
+    [SerializeField] float amplitude = 0.1f; 
+    [SerializeField] float frequency = 2f;
     float bobTime = 0f;
 
     private void Awake()

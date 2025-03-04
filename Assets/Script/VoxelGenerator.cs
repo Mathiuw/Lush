@@ -21,20 +21,18 @@ public class VoxelGenerator : MonoBehaviour
     [Header("Terrain")]
     [SerializeField] bool oneTimeGeneration = false;
     [SerializeField] GameObject chunk;
-    [SerializeField] int worldSize = 4;
+    [SerializeField] int worldSize = 3;
+    [SerializeField] int noiseHeight = 5;
+    [SerializeField] float detailScale = 8;
     Grid grid;
 
     [Header("Chunk")]
     [SerializeField] int chunkSize = 20;
-    [SerializeField] public int noiseHeight = 5;
-    [SerializeField] public float detailScale = 8;
 
     [Header("Trees")]
     [SerializeField] bool scatterTrees = true;
     [SerializeField] GameObject tree;
-    [SerializeField] int amountPerChunk = 20;
-
-    List<Vector3> treeChunkPositions = new List<Vector3>();
+    [SerializeField] int amountPerChunk = 10;
 
     private void Awake()
     {
@@ -42,11 +40,6 @@ public class VoxelGenerator : MonoBehaviour
         grid.cellSize = new Vector3(chunkSize, chunkSize, chunkSize);
 
         GenerateTerrain();
-
-        if (scatterTrees)
-        {
-            SpawnTrees();
-        }
     }
 
     private void Update()
@@ -61,7 +54,7 @@ public class VoxelGenerator : MonoBehaviour
 
     private void GenerateTerrain() 
     {
-        Hashtable newTiles = new Hashtable();
+        Hashtable newChunks = new Hashtable();
         float cTime = Time.realtimeSinceStartup;
 
         for (int x = -worldSize; x < worldSize; x++)
@@ -76,15 +69,12 @@ public class VoxelGenerator : MonoBehaviour
                 if (!chunkPositions.ContainsKey(position))
                 {
                     // Instantiate chunk game object
-                    GameObject block = Instantiate(this.chunk, position, Quaternion.identity, transform);
+                    GameObject chunkPrefab = Instantiate(this.chunk, position, Quaternion.identity, transform);
 
-                    Chunk chunk = new Chunk(cTime, block, chunkSize, this);
+                    Chunk chunk = new Chunk(cTime, chunkPrefab, chunkSize, this);
 
                     // Add chunk to hashtable
                     chunkPositions.Add(position, chunk);
-
-                    // Add chunk position to positions list
-                    //treeChunkPositions.Add(block.transform.position);
                 }
                 else
                 {
@@ -101,66 +91,43 @@ public class VoxelGenerator : MonoBehaviour
             }
             else
             {
-                newTiles.Add(chunk.chunkObject, chunk);
+                newChunks.Add(chunk.chunkObject, chunk);
             }
         }
 
-        chunkPositions = newTiles;
+        chunkPositions = newChunks;
         startPosition = player.transform.position;
-    }
-
-    private void SpawnTrees() 
-    {
-        for (int c = 0; c < amountPerChunk; c++)
-        {
-            GameObject spawnedTree = Instantiate(tree, GenerateTreeSpawnLocation(), Quaternion.identity, transform);
-        }
-    }
-
-    private Vector3 GenerateTreeSpawnLocation()
-    {
-        int randomIndex = Random.Range(0, treeChunkPositions.Count);
-
-        Vector3 newPos = new Vector3(
-            treeChunkPositions[randomIndex].x,
-            treeChunkPositions[randomIndex].y + 0.5f,
-            treeChunkPositions[randomIndex].z
-        );
-        treeChunkPositions.RemoveAt(randomIndex);
-
-        return newPos;
     }
 
     private void OnDrawGizmos()
     {
-        if (!grid || !showGizmos)
+        if (grid && showGizmos)
         {
-            return;
-        }
-
-        for (int x = -worldSize; x < worldSize; x++)
-        {
-            for (int z = -worldSize; z < worldSize; z++)
+            for (int x = -worldSize; x < worldSize; x++)
             {
-                // chunk position
-                Vector3 position = new Vector3((x + grid.WorldToCell(player.position).x) * chunkSize, 
-                                                0, 
-                                                (z + grid.WorldToCell(player.position).z) * chunkSize);
+                for (int z = -worldSize; z < worldSize; z++)
+                {
+                    // chunk position
+                    Vector3 position = new Vector3((x + grid.WorldToCell(player.position).x) * chunkSize,
+                                                    0,
+                                                    (z + grid.WorldToCell(player.position).z) * chunkSize);
 
-                Gizmos.color = Color.red;
-                Gizmos.DrawSphere(position, 0.5f);
+                    Gizmos.color = Color.red;
+                    Gizmos.DrawSphere(position, 0.5f);
+                }
             }
-        }       
+        }
     }
 
-    private class Chunk 
+    private class Chunk
     {
+        int size;
         public float cTimeStamp;
         public GameObject chunkObject;
         VoxelGenerator voxelGenerator;
         Mesh mesh;
 
-        int size;
+        List<Vector3> treeVerticePositions = new List<Vector3>();
 
         public Chunk(float cTimeStamp, GameObject chunkObject, int size, VoxelGenerator voxelGenerator)
         {
@@ -188,8 +155,12 @@ public class VoxelGenerator : MonoBehaviour
             {
                 for (int x = 0; x <= size; x++)
                 {
-                    float y = GenerateNoise(x /*+ voxelGenerator.xPlayerLocation*/, z /*+ voxelGenerator.zPlayerLocation*/, voxelGenerator.detailScale) * voxelGenerator.noiseHeight; //Mathf.PerlinNoise(x * 0.3f, z * 0.3f) * 1.25f;
+                    float y = GenerateNoise(x , z, voxelGenerator.detailScale) * voxelGenerator.noiseHeight;
                     vertices[i] = new Vector3(x, y, z);
+
+                    // Add chunk position to positions list
+                    treeVerticePositions.Add(vertices[i]);
+
                     i++;
                 }
             }
@@ -231,6 +202,12 @@ public class VoxelGenerator : MonoBehaviour
             mesh.RecalculateNormals();
             mesh.RecalculateBounds();
             mesh.Optimize();
+
+            // Spawn trees
+            if (voxelGenerator.scatterTrees)
+            {
+                SpawnTrees();
+            }
         }
 
         private float GenerateNoise(int x, int z, float detailScale)
@@ -239,6 +216,28 @@ public class VoxelGenerator : MonoBehaviour
             float noiseZ = (z + chunkObject.transform.position.z) / detailScale;
 
             return Mathf.PerlinNoise(noiseX, noiseZ);
+        }
+
+        private void SpawnTrees()
+        {
+            for (int c = 0; c < voxelGenerator.amountPerChunk; c++)
+            {
+                GameObject spawnedTree = Instantiate(voxelGenerator.tree, GenerateTreeSpawnLocation(), Quaternion.identity, chunkObject.transform);
+            }
+        }
+
+        private Vector3 GenerateTreeSpawnLocation()
+        {
+            int randomIndex = Random.Range(0, treeVerticePositions.Count);
+
+            Vector3 newPos = new Vector3(
+                treeVerticePositions[randomIndex].x + chunkObject.transform.position.x,
+                treeVerticePositions[randomIndex].y,
+                treeVerticePositions[randomIndex].z + chunkObject.transform.position.z
+            );
+            treeVerticePositions.RemoveAt(randomIndex);
+
+            return newPos;
         }
     }
 }
