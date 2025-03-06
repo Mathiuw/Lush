@@ -32,7 +32,7 @@ public class VoxelGenerator : MonoBehaviour
     [Header("Trees")]
     [SerializeField] bool scatterTrees = true;
     [SerializeField] GameObject tree;
-    [SerializeField] int amountPerChunk = 10;
+    [SerializeField] int amountPerChunk = 5;
 
     private void Awake()
     {
@@ -220,7 +220,13 @@ public class VoxelGenerator : MonoBehaviour
 
         private void SpawnTrees()
         {
-            for (int c = 0; c < voxelGenerator.amountPerChunk; c++)
+            if (voxelGenerator.amountPerChunk > voxelGenerator.chunkSize)
+            {
+                Debug.LogWarning("Amount of trees is greater than chunk size, resetting to default value");
+                voxelGenerator.amountPerChunk = 5;
+            }
+
+            for (int i = 0; i < voxelGenerator.amountPerChunk; i++)
             {
                 GameObject spawnedTree = Instantiate(voxelGenerator.tree, GenerateTreeSpawnLocation(), Quaternion.identity, chunkObject.transform);
             }
