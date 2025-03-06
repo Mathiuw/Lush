@@ -123,7 +123,6 @@ public class Player : MonoBehaviour
             Vector3 velocity = new Vector3(characterController.velocity.x, 0, characterController.velocity.z);
 
             bobTime += velocity.magnitude * Time.deltaTime;
-            Debug.Log(bobTime);
 
             playerCamera.localPosition = HeadBob(bobTime);
         }
