@@ -4,17 +4,8 @@ using UnityEngine;
 
 public class VoxelGenerator : MonoBehaviour
 {
-    [SerializeField] Transform player;
-    Vector3 startPosition = Vector3.zero;
+    Transform playerTransform;
     Hashtable chunkPositions = new Hashtable();
-
-    private int xPlayerMoved => (int)(player.position.x - startPosition.x);
-
-    private int zPlayerMoved => (int)(player.position.z - startPosition.z);
-
-    public int xPlayerLocation => (int)Mathf.Floor(player.position.x);
-
-    public int zPlayerLocation => (int)Mathf.Floor(player.position.z);
 
     [SerializeField] bool showGizmos = false;
 
@@ -38,6 +29,22 @@ public class VoxelGenerator : MonoBehaviour
     {
         grid = GetComponent<Grid>();
         grid.cellSize = new Vector3(chunkSize, chunkSize, chunkSize);
+    }
+
+    private void Start()
+    {
+        Player player = FindAnyObjectByType<Player>();
+
+        if (!player)
+        {
+            GameObject worldPivot = new GameObject("World_Pivot");
+            worldPivot.transform.position = Vector3.zero;
+            playerTransform = worldPivot.transform;
+        }
+        else
+        {
+            playerTransform = player.transform;
+        }
 
         GenerateTerrain();
     }
@@ -46,15 +53,11 @@ public class VoxelGenerator : MonoBehaviour
     {
         if (oneTimeGeneration) return;
 
-        if (Mathf.Abs(xPlayerMoved) >= chunkSize || Mathf.Abs(zPlayerMoved) >= chunkSize)
-        {
-            GenerateTerrain();
-        }
+        GenerateTerrain();
     }
 
     private void GenerateTerrain() 
-    {
-        Hashtable newChunks = new Hashtable();
+    {   
         float cTime = Time.realtimeSinceStartup;
 
         for (int x = -worldSize; x < worldSize; x++)
@@ -62,9 +65,9 @@ public class VoxelGenerator : MonoBehaviour
             for (int z = -worldSize; z < worldSize; z++)
             {
                 // chunk position
-                Vector3 position = new Vector3((x + grid.WorldToCell(player.position).x) * chunkSize,
+                Vector3 position = new Vector3((x + grid.WorldToCell(playerTransform.position).x) * chunkSize,
                                 0,
-                                (z + grid.WorldToCell(player.position).z) * chunkSize);
+                                (z + grid.WorldToCell(playerTransform.position).z) * chunkSize);
 
                 if (!chunkPositions.ContainsKey(position))
                 {
@@ -83,6 +86,8 @@ public class VoxelGenerator : MonoBehaviour
             }
         }
 
+        Hashtable newChunkPositions = new Hashtable();
+
         foreach (Chunk chunk in chunkPositions.Values)
         {
             if (!chunk.cTimeStamp.Equals(cTime))
@@ -91,12 +96,11 @@ public class VoxelGenerator : MonoBehaviour
             }
             else
             {
-                newChunks.Add(chunk.chunkObject, chunk);
+                newChunkPositions.Add(chunk.chunkObject.transform.position, chunk);
             }
         }
 
-        chunkPositions = newChunks;
-        startPosition = player.transform.position;
+        chunkPositions = newChunkPositions;
     }
 
     private void OnDrawGizmos()
@@ -108,9 +112,9 @@ public class VoxelGenerator : MonoBehaviour
                 for (int z = -worldSize; z < worldSize; z++)
                 {
                     // chunk position
-                    Vector3 position = new Vector3((x + grid.WorldToCell(player.position).x) * chunkSize,
+                    Vector3 position = new Vector3((x + grid.WorldToCell(playerTransform.position).x) * chunkSize,
                                                     0,
-                                                    (z + grid.WorldToCell(player.position).z) * chunkSize);
+                                                    (z + grid.WorldToCell(playerTransform.position).z) * chunkSize);
 
                     Gizmos.color = Color.red;
                     Gizmos.DrawSphere(position, 0.5f);
