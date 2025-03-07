@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Timer : MonoBehaviour
 {
-    [SerializeField] int minutesToComplete;
+    [SerializeField] int minutesToComplete = 1;
     float elapsedTime;
 
     CharacterController playerController;
@@ -29,6 +29,12 @@ public class Timer : MonoBehaviour
         if (playerVelocity.magnitude > 0)
         {
             elapsedTime += Time.deltaTime;
+        }
+
+        if (elapsedTime / 60 > minutesToComplete)
+        {
+            Debug.Log("Completed Timer");
+            enabled = false;
         }
     }
 }

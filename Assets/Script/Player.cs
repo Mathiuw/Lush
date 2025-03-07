@@ -15,11 +15,13 @@ public class Player : MonoBehaviour
     Vector2 MoveInput = Vector2.zero;
     Vector3 MoveDirection = Vector3.zero;
     Vector3 gravityVelocity = Vector3.zero;
+    Vector3 velocity = Vector3.zero;
 
     [Header("Ground Check")]
     [SerializeField] LayerMask groundMask;
     [SerializeField] float sphereRadius = 0.2f;
     [SerializeField] float sphereOffset = 0f;
+    bool grounded = false;
 
     // Camera movement variables
     [Header("Camera Movement")]
@@ -29,11 +31,18 @@ public class Player : MonoBehaviour
     Vector2 lookInput = Vector2.zero;
     float xlookRotation = 0f;
 
+    // Head bob variables
     [Header("Head Bob")]
     [SerializeField] bool headBob = true;
     [SerializeField] float amplitude = 0.1f; 
     [SerializeField] float frequency = 2f;
     float bobTime = 0f;
+
+    // Sound Variables
+    [Header("Audio")]
+    [SerializeField] float footstepFadeSpeeed = 10;
+    AudioSource footstepSound;
+    float maxVolume;
 
     private void Awake()
     {
@@ -45,6 +54,11 @@ public class Player : MonoBehaviour
 
         // Get character controller component
         characterController = GetComponent<CharacterController>();
+
+        // Get the audio source component from player feet
+        footstepSound = GetComponentInChildren<AudioSource>();
+        maxVolume = footstepSound.volume;
+        footstepSound.volume = 0;
 
         if (!characterController)
         {
@@ -117,21 +131,25 @@ public class Player : MonoBehaviour
         CameraMovement();
         PlayerMovement();
 
-        // Head bob
-        if (headBob)
-        {
-            Vector3 velocity = new Vector3(characterController.velocity.x, 0, characterController.velocity.z);
+        velocity = new Vector3(characterController.velocity.x, 0, characterController.velocity.z);
 
+        // Head bob
+        if (headBob && grounded)
+        {
             bobTime += velocity.magnitude * Time.deltaTime;
 
             playerCamera.localPosition = HeadBob(bobTime);
         }
+
+        FootstepAudio();
     }
 
     private void PlayerMovement() 
     {
         // Gravity
-        if (!Physics.CheckSphere(transform.position + Vector3.down + Vector3.up * sphereOffset, sphereRadius, groundMask))
+        grounded = Physics.CheckSphere(transform.position + Vector3.down + Vector3.up * sphereOffset, sphereRadius, groundMask);
+
+        if (!grounded)
         {
             gravityVelocity.y += gravity * Time.deltaTime;
         }
@@ -168,6 +186,22 @@ public class Player : MonoBehaviour
         position.y += Mathf.Sin(time * frequency) * amplitude;
         //position.x += Mathf.Cos(time * frequency / 2) * amplitude;
         return position;
+    }
+
+    private void FootstepAudio() 
+    {
+        float desiredVolume;
+
+        if (velocity.magnitude > 0 && grounded)
+        {
+            desiredVolume = maxVolume;
+        }
+        else
+        {
+            desiredVolume = 0;
+        }
+
+        footstepSound.volume = Mathf.Lerp(footstepSound.volume, desiredVolume, Time.deltaTime * footstepFadeSpeeed);
     }
 
     // DEBUG gizmos draw

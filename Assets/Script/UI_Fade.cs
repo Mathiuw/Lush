@@ -24,8 +24,6 @@ public class UI_Fade : MonoBehaviour
             Debug.LogError("UI_Fade cant find RawImage, disabling component");
             enabled = false;
         }
-
-
     }
 
     private void Update()
@@ -35,10 +33,10 @@ public class UI_Fade : MonoBehaviour
         switch (fadeType)
         {
             case FadeType.FadeIn:
-                imageColor.a += fadeTime * Time.deltaTime;
+                imageColor.a += Time.deltaTime / fadeTime;
                 break;
             case FadeType.FadeOut:
-                imageColor.a -= fadeTime * Time.deltaTime;
+                imageColor.a -= Time.deltaTime / fadeTime;
                 break;
             default:
                 break;
