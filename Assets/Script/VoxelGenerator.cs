@@ -232,7 +232,9 @@ public class VoxelGenerator : MonoBehaviour
 
             for (int i = 0; i < voxelGenerator.amountPerChunk; i++)
             {
-                GameObject spawnedTree = Instantiate(voxelGenerator.tree, GenerateTreeSpawnLocation(), Quaternion.identity, chunkObject.transform);
+                float randomY = Random.Range(0, 360);
+
+                GameObject spawnedTree = Instantiate(voxelGenerator.tree, GenerateTreeSpawnLocation(), Quaternion.Euler(new Vector3(0, randomY, 0)), chunkObject.transform);
             }
         }
 
