@@ -45,7 +45,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3217bab9371c5ef4186e05afb4f42c64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
   showGizmos: 1
   oneTimeGeneration: 0
   chunk: {fileID: 9201598022883144477, guid: 7f00e8a8236619f42b59d7f1f99b5d2e, type: 3}
@@ -56,6 +55,7 @@ MonoBehaviour:
   scatterTrees: 1
   tree: {fileID: 6472695018467320297, guid: 671e94efaf55c054eaf75765e8bda21b, type: 3}
   amountPerChunk: 10
+  scaleVariation: 1
 --- !u!156049354 &7543268071015711162
 Grid:
   m_ObjectHideFlags: 0

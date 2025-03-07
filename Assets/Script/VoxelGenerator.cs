@@ -24,6 +24,7 @@ public class VoxelGenerator : MonoBehaviour
     [SerializeField] bool scatterTrees = true;
     [SerializeField] GameObject tree;
     [SerializeField] int amountPerChunk = 5;
+    [SerializeField] float scaleVariation = 0.75f;
 
     private void Awake()
     {
@@ -233,8 +234,10 @@ public class VoxelGenerator : MonoBehaviour
             for (int i = 0; i < voxelGenerator.amountPerChunk; i++)
             {
                 float randomY = Random.Range(0, 360);
+                float randomScale = Random.Range(-voxelGenerator.scaleVariation, voxelGenerator.scaleVariation);
 
                 GameObject spawnedTree = Instantiate(voxelGenerator.tree, GenerateTreeSpawnLocation(), Quaternion.Euler(new Vector3(0, randomY, 0)), chunkObject.transform);
+                spawnedTree.transform.localScale += new Vector3(randomScale, randomScale, randomScale);
             }
         }
 
@@ -244,7 +247,7 @@ public class VoxelGenerator : MonoBehaviour
 
             Vector3 newPos = new Vector3(
                 treeVerticePositions[randomIndex].x + chunkObject.transform.position.x,
-                treeVerticePositions[randomIndex].y,
+                treeVerticePositions[randomIndex].y -0.1f,
                 treeVerticePositions[randomIndex].z + chunkObject.transform.position.z
             );
             treeVerticePositions.RemoveAt(randomIndex);
