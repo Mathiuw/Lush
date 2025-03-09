@@ -24,6 +24,7 @@ public class VoxelGenerator : MonoBehaviour
     [SerializeField] bool scatterTrees = true;
     [SerializeField] GameObject tree;
     [SerializeField] int amountPerChunk = 5;
+    [SerializeField] int amountVariation = 2;
     [SerializeField] float scaleVariation = 0.75f;
 
     private void Awake()
@@ -231,7 +232,9 @@ public class VoxelGenerator : MonoBehaviour
                 voxelGenerator.amountPerChunk = 5;
             }
 
-            for (int i = 0; i < voxelGenerator.amountPerChunk; i++)
+            int amountOftrees = voxelGenerator.amountPerChunk + Random.Range(-voxelGenerator.amountVariation, voxelGenerator.amountVariation);
+
+            for (int i = 0; i < amountOftrees; i++)
             {
                 float randomY = Random.Range(0, 360);
                 float randomScale = Random.Range(-voxelGenerator.scaleVariation, voxelGenerator.scaleVariation);

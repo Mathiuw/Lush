@@ -467,6 +467,6 @@ MonoBehaviour:
   sensibility: 20
   headPivot: {fileID: 3753879737632772397}
   headBob: 1
-  amplitude: 0.1
+  amplitude: 0.11
   frequency: 2
   footstepFadeSpeeed: 10

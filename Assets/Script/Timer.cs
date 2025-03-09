@@ -3,9 +3,16 @@ using UnityEngine;
 public class Timer : MonoBehaviour
 {
     [SerializeField] int minutesToComplete = 1;
+    CharacterController playerController;
     float elapsedTime;
 
-    CharacterController playerController;
+    public delegate void OnTimerComplete();
+    public static event OnTimerComplete onTimerComplete;
+
+    public float GetElapsedTime() 
+    {
+        return elapsedTime; 
+    }
 
     private void Start()
     {
@@ -20,6 +27,8 @@ public class Timer : MonoBehaviour
         {
             playerController = player.GetComponent<CharacterController>();
         }
+
+        onTimerComplete += OnTimerCompleteFunc;
     }
 
     private void Update()
@@ -33,8 +42,13 @@ public class Timer : MonoBehaviour
 
         if (elapsedTime / 60 > minutesToComplete)
         {
-            Debug.Log("Completed Timer");
+            onTimerComplete?.Invoke();
             enabled = false;
         }
+    }
+
+    private void OnTimerCompleteFunc() 
+    {
+        Debug.Log("Completed Timer");
     }
 }
