@@ -5,6 +5,7 @@ public class Timer : MonoBehaviour
     [SerializeField] int minutesToComplete = 1;
     CharacterController playerController;
     float elapsedTime;
+    bool completed = false;
 
     public delegate void OnTimerComplete();
     public static event OnTimerComplete onTimerComplete;
@@ -27,8 +28,6 @@ public class Timer : MonoBehaviour
         {
             playerController = player.GetComponent<CharacterController>();
         }
-
-        onTimerComplete += OnTimerCompleteFunc;
     }
 
     private void Update()
@@ -40,15 +39,11 @@ public class Timer : MonoBehaviour
             elapsedTime += Time.deltaTime;
         }
 
-        if (elapsedTime / 60 > minutesToComplete)
+        if (elapsedTime / 60 > minutesToComplete && !completed)
         {
             onTimerComplete?.Invoke();
-            enabled = false;
+            Debug.Log("Completed Timer");
+            completed = true;
         }
-    }
-
-    private void OnTimerCompleteFunc() 
-    {
-        Debug.Log("Completed Timer");
     }
 }

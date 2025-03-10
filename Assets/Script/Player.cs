@@ -40,7 +40,7 @@ public class Player : MonoBehaviour
 
     // Sound Variables
     [Header("Audio")]
-    [SerializeField] float footstepFadeSpeeed = 10;
+    [SerializeField] float footstepFadeSpeed = 10;
     AudioSource footstepSound;
     float maxVolume;
 
@@ -68,6 +68,53 @@ public class Player : MonoBehaviour
         }
     }
 
+    private void OnMovePerformed(InputAction.CallbackContext callbackContext)
+    {
+        MoveInput = callbackContext.ReadValue<Vector2>();
+    }
+
+    private void OnMoveCanceled(InputAction.CallbackContext callbackContext)
+    {
+        MoveInput = Vector2.zero;
+    }
+
+    private void OnLookPerformed(InputAction.CallbackContext callbackContext)
+    {
+        lookInput = callbackContext.ReadValue<Vector2>();
+    }
+
+    private void OnLookCanceled(InputAction.CallbackContext callbackContext)
+    {
+        lookInput = Vector2.zero;
+    }
+
+    private void OnMenuToggle(bool toggle) 
+    {
+        if (toggle)
+        {
+            Cursor.lockState = CursorLockMode.None;
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+    }
+
+    public InputActions_Player GetInputActions_Player() 
+    { 
+        return inputActions;
+    }
+
+    public float GetSensibility() 
+    {
+        return sensibility;
+    }
+
+    public void SetSensibiity(float sensibility) 
+    {
+        this.sensibility = sensibility;
+    }
+
     private void OnEnable()
     {
         // Create input class
@@ -80,8 +127,6 @@ public class Player : MonoBehaviour
         // Look actions
         inputActions.Player.Look.performed += OnLookPerformed;
         inputActions.Player.Look.canceled += OnLookCanceled;
-        // Exit game action
-        inputActions.Player.Exit.started += OnExitStarted;
 
         inputActions.Enable();
     }
@@ -95,35 +140,14 @@ public class Player : MonoBehaviour
         // Look actions
         inputActions.Player.Look.performed -= OnLookPerformed;
         inputActions.Player.Look.canceled -= OnLookCanceled;
-        // Exit game action
-        inputActions.Player.Exit.started -= OnExitStarted;
 
         inputActions.Disable();
     }
 
-    private void OnMovePerformed(InputAction.CallbackContext callbackContext)
+    private void Start()
     {
-        MoveInput = callbackContext.ReadValue<Vector2>();
-    }
-
-    private void OnMoveCanceled(InputAction.CallbackContext callbackContext) 
-    {
-        MoveInput = Vector2.zero;
-    }
-
-    private void OnLookPerformed(InputAction.CallbackContext callbackContext) 
-    {
-        lookInput = callbackContext.ReadValue<Vector2>();
-    }
-
-    private void OnLookCanceled(InputAction.CallbackContext callbackContext) 
-    {
-        lookInput = Vector2.zero;
-    }
-
-    private void OnExitStarted(InputAction.CallbackContext callbackContext) 
-    {
-        Application.Quit();
+        // Bind event on ment toggle
+        UI_Menu.onMenuToggle += OnMenuToggle;
     }
 
     private void Update()
@@ -146,6 +170,7 @@ public class Player : MonoBehaviour
 
     private void PlayerMovement() 
     {
+
         // Gravity
         grounded = Physics.CheckSphere(transform.position + Vector3.down + Vector3.up * sphereOffset, sphereRadius, groundMask);
 
@@ -163,11 +188,12 @@ public class Player : MonoBehaviour
         // Movement
         MoveDirection = transform.forward * MoveInput.y + transform.right * MoveInput.x;
 
-        characterController.Move(MoveDirection.normalized * speed * Time.deltaTime);
+        characterController.Move(speed * Time.deltaTime * MoveDirection.normalized);
     }
 
     private void CameraMovement()
     {
+
         float mouseX = lookInput.x * sensibility * Time.deltaTime;
         float mouseY = lookInput.y * sensibility * Time.deltaTime;
 
@@ -201,7 +227,7 @@ public class Player : MonoBehaviour
             desiredVolume = 0;
         }
 
-        footstepSound.volume = Mathf.Lerp(footstepSound.volume, desiredVolume, Time.deltaTime * footstepFadeSpeeed);
+        footstepSound.volume = Mathf.Lerp(footstepSound.volume, desiredVolume, Time.deltaTime * footstepFadeSpeed);
     }
 
     // DEBUG gizmos draw

@@ -10,7 +10,6 @@ public class VoxelGenerator : MonoBehaviour
     [SerializeField] bool showGizmos = false;
 
     [Header("Terrain")]
-    [SerializeField] bool oneTimeGeneration = false;
     [SerializeField] GameObject chunk;
     [SerializeField] int worldSize = 3;
     [SerializeField] int noiseHeight = 5;
@@ -53,8 +52,6 @@ public class VoxelGenerator : MonoBehaviour
 
     private void Update()
     {
-        if (oneTimeGeneration) return;
-
         GenerateTerrain();
     }
 
