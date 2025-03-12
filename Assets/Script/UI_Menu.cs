@@ -96,6 +96,11 @@ public class UI_Menu : MonoBehaviour
         timerText.text = "Time Walked: " + string.Format("{0:00}:{1:00}", minutes, seconds);
     }
 
+    public void ExitGame()
+    {
+        Application.Quit();
+    }
+
     public void SetVolume(float volume) 
     {
         audioMixer.SetFloat("volume", volume);
