@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 public class Clouds : MonoBehaviour
@@ -11,14 +12,19 @@ public class Clouds : MonoBehaviour
     [Range(0, 1)]
     [SerializeField] float transparency = 0.5f;
     [Header("Offset")]
-    [SerializeField] float offsetX = 0f;
-    [SerializeField] float offsetY = 0f;
+    [SerializeField] float speed = 0.1f;
+    float offsetX = 0f;
+    float offsetY = 0f;
+
+    Renderer meshRenderer;
     Transform player;
+    Texture2D cloudTexture;
 
     private void Awake()
     {
-        Renderer meshRenderer = GetComponent<Renderer>();
-        meshRenderer.material.mainTexture = GenerateTexture();
+        cloudTexture = new(size, size);
+
+        meshRenderer = GetComponent<Renderer>();
 
         // Set texture base transparency
         Color color = meshRenderer.material.color;
@@ -26,7 +32,7 @@ public class Clouds : MonoBehaviour
         meshRenderer.material.color = color;
     }
 
-    private void Start()
+    private IEnumerator Start()
     {
         // Try to find player
         player = FindAnyObjectByType<Player>().transform;
@@ -35,6 +41,21 @@ public class Clouds : MonoBehaviour
         {
             Debug.LogError("Clouds cant find player, component disabled");
             enabled = false;
+        }
+
+        GenerateTexture();
+
+        meshRenderer.material.mainTexture = cloudTexture;
+
+        while (true)
+        {
+            // Move cloud texture
+            offsetX += speed;
+            offsetY += speed;
+
+            GenerateTexture();
+
+            yield return new WaitForSeconds(0.1f);
         }
     }
 
@@ -46,8 +67,6 @@ public class Clouds : MonoBehaviour
 
     private Texture2D GenerateTexture()
     {
-        Texture2D texture = new(size, size);
-
         // Generate perlin noise map for texture
         for (int x = 0; x < size; x++)
         {
@@ -55,12 +74,15 @@ public class Clouds : MonoBehaviour
             {
                 Color color = CalculateColor(x, y);
 
-                texture.SetPixel(x, y, color);
+                if (cloudTexture.GetPixel(x, y) != color)
+                {
+                    cloudTexture.SetPixel(x, y, color);
+                }                        
             }
         }
 
-        texture.Apply();
-        return texture;
+        cloudTexture.Apply();
+        return cloudTexture;
     }
 
     private Color CalculateColor(int x, int y)

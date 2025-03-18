@@ -17,7 +17,7 @@ RenderSettings:
   m_Fog: 1
   m_FogColor: {r: 0.90588236, g: 0.3254902, b: 1, a: 1}
   m_FogMode: 3
-  m_FogDensity: 0.03
+  m_FogDensity: 0.025
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
   m_AmbientSkyColor: {r: 0.212, g: 0.227, b: 0.259, a: 1}
@@ -3374,12 +3374,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38381fffaa9b6504a8a9fd08669a5916, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  size: 256
+  size: 128
   scale: 10
-  alpha: 1
-  alphaClip: 0.4
+  amount: 0.5
+  transparency: 0.5
   offsetX: 0
   offsetY: 0
+  speed: 0.01
 --- !u!23 &1847767377
 MeshRenderer:
   m_ObjectHideFlags: 0
