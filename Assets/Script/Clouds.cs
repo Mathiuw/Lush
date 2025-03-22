@@ -13,8 +13,8 @@ public class Clouds : MonoBehaviour
     [SerializeField] float transparency = 0.5f;
     [Header("Offset")]
     [SerializeField] float speed = 0.1f;
-    float offsetX = 0f;
-    float offsetY = 0f;
+    public float offsetX;
+    public float offsetY;
 
     Renderer meshRenderer;
     Transform player;
@@ -43,18 +43,25 @@ public class Clouds : MonoBehaviour
             enabled = false;
         }
 
+        // Set seed
+        Seed seed = FindAnyObjectByType<Seed>();
+
+        if (seed)
+        {
+            offsetX = seed.SeedValue;
+            offsetY = seed.SeedValue;
+        }
+        else
+        {
+            Debug.LogError("Cloud cant find Seed class");
+        }
+
         GenerateTexture();
 
         meshRenderer.material.mainTexture = cloudTexture;
 
         while (true)
         {
-            // Move cloud texture
-            offsetX += speed;
-            offsetY += speed;
-
-            GenerateTexture();
-
             yield return new WaitForSeconds(0.1f);
         }
     }
@@ -63,6 +70,12 @@ public class Clouds : MonoBehaviour
     {
         // Follow player
         transform.position = new Vector3(player.position.x, transform.position.y, player.position.z);
+
+        // Move cloud texture
+        offsetX += speed;
+        offsetY += speed;
+
+        GenerateTexture();
     }
 
     private Texture2D GenerateTexture()

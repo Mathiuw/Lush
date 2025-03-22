@@ -461,7 +461,7 @@ MonoBehaviour:
   gravity: -20
   groundMask:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 129
   sphereRadius: 0.2
   sphereOffset: 0.03
   sensibility: 20
@@ -469,4 +469,4 @@ MonoBehaviour:
   headBob: 1
   amplitude: 0.11
   frequency: 2
-  footstepFadeSpeeed: 10
+  footstepFadeSpeed: 10

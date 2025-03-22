@@ -14,6 +14,7 @@ public class VoxelGenerator : MonoBehaviour
     [SerializeField] int worldSize = 3;
     [SerializeField] int noiseHeight = 5;
     [SerializeField] float detailScale = 8;
+    int offset;
     Grid grid;
 
     [Header("Chunk")]
@@ -47,6 +48,17 @@ public class VoxelGenerator : MonoBehaviour
             playerTransform = player.transform;
         }
 
+        Seed seed = FindAnyObjectByType<Seed>();
+
+        if (seed)
+        {
+            offset = seed.SeedValue;
+        }
+        else
+        {
+            Debug.Log(name + " cant find Seed clss");
+        }
+
         GenerateTerrain();
     }
 
@@ -72,6 +84,9 @@ public class VoxelGenerator : MonoBehaviour
                 {
                     // Instantiate chunk game object
                     GameObject chunkPrefab = Instantiate(this.chunk, position, Quaternion.identity, transform);
+
+                    // set chunk prefab layer to "Ground"
+                    chunkPrefab.layer = 7;
 
                     Chunk chunk = new Chunk(cTime, chunkPrefab, chunkSize, this);
 
@@ -158,7 +173,7 @@ public class VoxelGenerator : MonoBehaviour
             {
                 for (int x = 0; x <= size; x++)
                 {
-                    float y = GenerateNoise(x , z, voxelGenerator.detailScale) * voxelGenerator.noiseHeight;
+                    float y = GenerateNoise(x + voxelGenerator.offset, z + voxelGenerator.offset, voxelGenerator.detailScale) * voxelGenerator.noiseHeight;
                     vertices[i] = new Vector3(x, y, z);
 
                     // Add chunk position to positions list
