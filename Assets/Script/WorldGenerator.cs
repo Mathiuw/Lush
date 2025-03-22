@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class VoxelGenerator : MonoBehaviour
+public class WorldGenerator : MonoBehaviour
 {
     Transform playerTransform;
     Hashtable chunkPositions = new Hashtable();
@@ -142,12 +142,12 @@ public class VoxelGenerator : MonoBehaviour
         int size;
         public float cTimeStamp;
         public GameObject chunkObject;
-        VoxelGenerator voxelGenerator;
+        WorldGenerator voxelGenerator;
         Mesh mesh;
 
         List<Vector3> treeVerticePositions = new List<Vector3>();
 
-        public Chunk(float cTimeStamp, GameObject chunkObject, int size, VoxelGenerator voxelGenerator)
+        public Chunk(float cTimeStamp, GameObject chunkObject, int size, WorldGenerator voxelGenerator)
         {
             this.cTimeStamp = cTimeStamp;
             this.chunkObject = chunkObject;
