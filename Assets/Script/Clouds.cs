@@ -6,15 +6,14 @@ public class Clouds : MonoBehaviour
 {
     [Header("Texture")]
     [SerializeField] int size = 256;
-    [SerializeField] float scale = 20f;
+    float scale = 50f;
+    [SerializeField] float zoom = 1.0f;
     [Range(0, 1)]
     [SerializeField] float amount = 0.5f;
-    [Range(0, 1)]
-    [SerializeField] float transparency = 0.5f;
     [Header("Offset")]
     [SerializeField] float speed = 0.1f;
-    public float offsetX;
-    public float offsetY;
+    public float tileOffset;
+    public float offset;
 
     Renderer meshRenderer;
     Transform player;
@@ -25,14 +24,9 @@ public class Clouds : MonoBehaviour
         cloudTexture = new(size, size);
 
         meshRenderer = GetComponent<Renderer>();
-
-        // Set texture base transparency
-        Color color = meshRenderer.material.color;
-        color.a = transparency;
-        meshRenderer.material.color = color;
     }
 
-    private IEnumerator Start()
+    private void Start()
     {
         // Try to find player
         player = FindAnyObjectByType<Player>().transform;
@@ -48,8 +42,7 @@ public class Clouds : MonoBehaviour
 
         if (seed)
         {
-            offsetX = seed.SeedValue;
-            offsetY = seed.SeedValue;
+            offset = seed.SeedValue;
         }
         else
         {
@@ -59,23 +52,20 @@ public class Clouds : MonoBehaviour
         GenerateTexture();
 
         meshRenderer.material.mainTexture = cloudTexture;
-
-        while (true)
-        {
-            yield return new WaitForSeconds(0.1f);
-        }
     }
 
     private void Update()
     {
         // Follow player
         transform.position = new Vector3(player.position.x, transform.position.y, player.position.z);
+        
+        // Set texture scale
+        meshRenderer.material.SetTextureScale(meshRenderer.material.GetTexturePropertyNameIDs()[1], new Vector2(zoom, zoom));
 
         // Move cloud texture
-        offsetX += speed;
-        offsetY += speed;
+        tileOffset += speed * Time.deltaTime;
 
-        GenerateTexture();
+        meshRenderer.material.SetTextureOffset(meshRenderer.material.GetTexturePropertyNameIDs()[1], new Vector2(tileOffset, tileOffset));
     }
 
     private Texture2D GenerateTexture()
@@ -100,8 +90,8 @@ public class Clouds : MonoBehaviour
 
     private Color CalculateColor(int x, int y)
     {
-        float xCoord = (float)x / size * scale + offsetX;
-        float yCoord = (float)y / size * scale + offsetY;
+        float xCoord = (float)x / size * scale + offset;
+        float yCoord = (float)y / size * scale + offset;
 
         float colorSample = Mathf.PerlinNoise(xCoord, yCoord);
 
