@@ -54,6 +54,7 @@ public class Clouds : MonoBehaviour
         meshRenderer.material.mainTexture = cloudTexture;
     }
 
+    // TODO: OPTIMIZATION
     private void Update()
     {
         // Follow player
