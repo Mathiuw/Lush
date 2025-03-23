@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using UnityEngine;
 
 public class Clouds : MonoBehaviour
@@ -12,12 +11,13 @@ public class Clouds : MonoBehaviour
     [SerializeField] float amount = 0.5f;
     [Header("Offset")]
     [SerializeField] float speed = 0.1f;
+    Renderer meshRenderer;
+    Texture2D cloudTexture;
     public float tileOffset;
     public float offset;
+    int TextureID;
 
-    Renderer meshRenderer;
     Transform player;
-    Texture2D cloudTexture;
 
     private void Awake()
     {
@@ -52,21 +52,21 @@ public class Clouds : MonoBehaviour
         GenerateTexture();
 
         meshRenderer.material.mainTexture = cloudTexture;
+
+        TextureID = meshRenderer.material.GetTexturePropertyNameIDs()[1];
     }
 
-    // TODO: OPTIMIZATION
     private void Update()
     {
         // Follow player
         transform.position = new Vector3(player.position.x, transform.position.y, player.position.z);
         
         // Set texture scale
-        meshRenderer.material.SetTextureScale(meshRenderer.material.GetTexturePropertyNameIDs()[1], new Vector2(zoom, zoom));
+        meshRenderer.material.SetTextureScale(TextureID, new Vector2(zoom, zoom));
 
         // Move cloud texture
         tileOffset += speed * Time.deltaTime;
-
-        meshRenderer.material.SetTextureOffset(meshRenderer.material.GetTexturePropertyNameIDs()[1], new Vector2(tileOffset, tileOffset));
+        meshRenderer.material.SetTextureOffset(TextureID, new Vector2(tileOffset, tileOffset));
     }
 
     private Texture2D GenerateTexture()
