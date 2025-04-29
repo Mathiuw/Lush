@@ -115,6 +115,11 @@ public class Player : MonoBehaviour
         this.sensibility = sensibility;
     }
 
+    public Vector3 GetMoveDirection() 
+    {
+        return MoveDirection;
+    }
+
     private void OnEnable()
     {
         // Create input class
