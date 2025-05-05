@@ -93,7 +93,7 @@ public class UI_Menu : MonoBehaviour
 
         int minutes = elapsedTime / 60;
         int seconds = elapsedTime % 60;
-        timerText.text = "Time Walked: " + string.Format("{0:00}:{1:00}", minutes, seconds);
+        timerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
     }
 
     public void ExitGame()
@@ -120,7 +120,7 @@ public class UI_Menu : MonoBehaviour
             borders.gameObject.SetActive(!toggle);
             SaveGame();
         }
-        else Debug.LogError("Menu cant find UI borders");
+        else Debug.LogError("Cant find UI borders");
     }
 
     private void ToggleMenu(InputAction.CallbackContext context)
