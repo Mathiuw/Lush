@@ -7,16 +7,18 @@ public static class Save
 {
     static readonly string path = Application.persistentDataPath + "/LushData.bin";
 
-    public static void SaveData(Player player, AudioMixer audioMixer, bool widescreen) 
+    public static void SaveData(Player player, AudioMixer audioMixer, bool widescreen, int language) 
     {
         BinaryFormatter formatter = new();
 
         FileStream stream = new(path, FileMode.Create);
 
-        GameData gameData = new(player, audioMixer, widescreen);
+        GameData gameData = new(player, audioMixer, widescreen, language);
 
         formatter.Serialize(stream, gameData);
         stream.Close();
+
+        Debug.Log("Game saved");
     }
 
     public static GameData LoadData() 

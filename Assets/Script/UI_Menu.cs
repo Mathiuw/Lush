@@ -1,7 +1,10 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.InputSystem;
+using UnityEngine.Localization;
+using UnityEngine.Localization.Settings;
 using UnityEngine.UI;
 
 public class UI_Menu : MonoBehaviour
@@ -15,7 +18,8 @@ public class UI_Menu : MonoBehaviour
     [SerializeField] Toggle widescreenToggle;
     [SerializeField] Transform borders;
     [Header("Timer")]
-    [SerializeField]TextMeshProUGUI timerText;
+    [SerializeField] LocalizedString localStringElapsedTime;
+    [SerializeField] TextMeshProUGUI timerText;
     Timer timer;
 
     CanvasGroup canvasGroup;
@@ -23,6 +27,8 @@ public class UI_Menu : MonoBehaviour
 
     public delegate void OnMenuToggle(bool toggle);
     public static event OnMenuToggle onMenuToggle;
+
+    private bool changeLanguageActive = false;
 
     private void Awake()
     {
@@ -43,86 +49,43 @@ public class UI_Menu : MonoBehaviour
         }
         else
         {
-            Debug.LogError("Menu cant find player, menu disabled");
+            Debug.LogError("Cant find player, menu disabled");
             enabled = false;
         }
 
-        //Searches for timer class
+        // Searches for timer class
         timer = FindAnyObjectByType<Timer>();
 
         if (!timer)
         {
-            Debug.LogError("Menu cant find timer");
+            Debug.LogError("Cant find timer");
         }
 
-        // Check if have any save files, if have, load then
-        if (player && audioMixer)
-        {
-            GameData gameData = Save.LoadData();
+        // Set the argument for the timer text
+        localStringElapsedTime.Arguments = new object[] { timer.GetElapsedTime() };
+        localStringElapsedTime.StringChanged += UpdateText;
 
-            if (gameData != null)
-            {
-                // Load volume data
-                SetVolume(gameData.volume);
-                volumeSlider.value = gameData.volume;
-
-                // Load mouse sensibility data
-                SetMouseSensibility(gameData.mouseSensibility);
-                mouseSenseSlider.value = gameData.mouseSensibility;
-
-                // Load widescreen data
-                ToggleWidescreen(gameData.widescreen);
-                widescreenToggle.isOn = gameData.widescreen;
-            }
-            else
-            {
-                // Set volume slider to its audio mixer value
-                audioMixer.GetFloat("volume", out float volumeValue);
-                volumeSlider.value = volumeValue;
-
-                // Set mouse sense slider to its audio mixer value
-                mouseSenseSlider.value = player.GetSensibility();
-            }
-        }
-        else Debug.LogError("An error occurred when trying load an save");
+        // Tries to load saved settings
+        LoadGame();
     }
 
     private void Update()
     {
+        // Updates timer text
         int elapsedTime = Mathf.FloorToInt(timer.GetElapsedTime());
 
         int minutes = elapsedTime / 60;
         int seconds = elapsedTime % 60;
-        timerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
+        localStringElapsedTime.Arguments[0] = string.Format("{0:00}:{1:00}", minutes, seconds);
+        localStringElapsedTime.RefreshString();
     }
 
-    public void ExitGame()
+    private void OnDisable()
     {
-        Application.Quit();
+        localStringElapsedTime.StringChanged -= UpdateText;
     }
 
-    public void SetVolume(float volume) 
-    {
-        audioMixer.SetFloat("volume", volume);
-        SaveGame();
-    }
-
-    public void SetMouseSensibility(float sensibility) 
-    {
-        player.SetSensibiity(sensibility);
-        SaveGame();
-    }
-
-    public void ToggleWidescreen(bool toggle) 
-    {
-        if (borders)
-        {
-            borders.gameObject.SetActive(!toggle);
-            SaveGame();
-        }
-        else Debug.LogError("Cant find UI borders");
-    }
-
+    // Open and close menu
     private void ToggleMenu(InputAction.CallbackContext context)
     {
         if (canvasGroup.alpha == 0)
@@ -151,8 +114,110 @@ public class UI_Menu : MonoBehaviour
         }
     }
 
-    private void SaveGame() 
+    // Menu functions
+
+    public void ExitGame()
     {
-        Save.SaveData(player, audioMixer, widescreenToggle.isOn);
+        Application.Quit();
+    }
+
+    public void SetVolume(float volume) 
+    {
+        audioMixer.SetFloat("volume", volume);
+        SaveGame();
+    }
+
+    public void SetMouseSensibility(float sensibility) 
+    {
+        player.SetSensibiity(sensibility);
+        SaveGame();
+    }
+
+    public void ToggleWidescreen(bool toggle) 
+    {
+        if (borders)
+        {
+            borders.gameObject.SetActive(!toggle);
+            SaveGame();
+        }
+        else Debug.LogError("Cant find UI borders");
+    }
+
+    // Localization functions
+
+    // Get current language
+    public int GetCurrentLocale()
+    {
+        UnityEngine.Localization.Locale currentLocale = LocalizationSettings.SelectedLocale;
+
+        return LocalizationSettings.AvailableLocales.Locales.IndexOf(currentLocale);
+    }
+
+    // Change language
+    public void ChangeLocale(int localeID)
+    {
+        // if SetLocale coroutine is active, then return
+        if (changeLanguageActive) return;
+
+        StartCoroutine(SetLocale(localeID));
+    }
+
+    // Change language coroutine
+    IEnumerator SetLocale(int localeID)
+    {
+        changeLanguageActive = true;
+        yield return LocalizationSettings.InitializationOperation;
+        LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[localeID];
+        SaveGame();
+        changeLanguageActive = false;
+    }
+    
+    private void UpdateText(string value)
+    {
+        timerText.text = value;
+    }
+
+    // Game data functions
+
+    private void LoadGame() 
+    {
+        // Check if have any save files, if have, load then
+        if (player && audioMixer)
+        {
+            GameData gameData = Save.LoadData();
+
+            if (gameData != null)
+            {
+                // Load volume data
+                SetVolume(gameData.volume);
+                volumeSlider.value = gameData.volume;
+
+                // Load mouse sensibility data
+                SetMouseSensibility(gameData.mouseSensibility);
+                mouseSenseSlider.value = gameData.mouseSensibility;
+
+                // Load widescreen data
+                ToggleWidescreen(gameData.widescreen);
+                widescreenToggle.isOn = gameData.widescreen;
+
+                // Load language data
+                ChangeLocale(gameData.language);
+            }
+            else
+            {
+                // Set volume slider to its audio mixer value
+                audioMixer.GetFloat("volume", out float volumeValue);
+                volumeSlider.value = volumeValue;
+
+                // Set mouse sense slider to its audio mixer value
+                mouseSenseSlider.value = player.GetSensibility();
+            }
+        }
+        else Debug.LogError("An error occurred when trying load an save");
+    }
+
+    private void SaveGame()
+    {
+        Save.SaveData(player, audioMixer, widescreenToggle.isOn, GetCurrentLocale());
     }
 }

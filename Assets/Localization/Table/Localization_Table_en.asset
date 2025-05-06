@@ -16,12 +16,14 @@ MonoBehaviour:
     m_Code: en
   m_SharedData: {fileID: 11400000, guid: 3a42f663f091bb04f836206fa945949d, type: 2}
   m_Metadata:
-    m_Items: []
+    m_Items:
+    - rid: 9220491451600470084
   m_TableData:
   - m_Id: 579067019264
-    m_Localized: 'Time Walked: '
+    m_Localized: Time Walked:{0}
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 9220491451600470084
   - m_Id: 7047715586048
     m_Localized: Exit Game
     m_Metadata:
@@ -32,4 +34,10 @@ MonoBehaviour:
       m_Items: []
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 9220491451600470084
+      type: {class: SmartFormatTag, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_Entries: 
+        m_SharedEntries:
+        - id: 579067019264
