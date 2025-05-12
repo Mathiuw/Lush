@@ -7,6 +7,8 @@ public class SoundEvent : MonoBehaviour
     Player player;
     Vector3 desiredPosition;
     [SerializeField] bool approaching = false;
+    [SerializeField] bool destroyIfTooClose = false;
+    [SerializeField] float distanceToDestroy = .2f;
     [SerializeField] float speed = 1.0f;
     float x;
     float z;
@@ -33,6 +35,7 @@ public class SoundEvent : MonoBehaviour
         transform.position = desiredPosition;
 
         audioSource.Play();
+        Invoke("OnAudioEnd", audioSource.clip.length);
     }
 
     private void Update()
@@ -40,6 +43,11 @@ public class SoundEvent : MonoBehaviour
         if (approaching)
         {
             transform.position = Vector3.Lerp(transform.position, player.transform.position, Time.deltaTime * speed);
+
+            if (destroyIfTooClose && Vector3.Distance(transform.position, player.transform.position) < distanceToDestroy)
+            {
+                Destroy(gameObject);
+            }
         }
         else 
         {
@@ -47,6 +55,13 @@ public class SoundEvent : MonoBehaviour
         }
 
         Debug.DrawLine(player.transform.position, transform.position, Color.yellow);
+    }
+
+    private void OnAudioEnd() 
+    {
+        if (audioSource.loop) return;
+        
+        Destroy(gameObject);
     }
 
     private void OnDrawGizmos()

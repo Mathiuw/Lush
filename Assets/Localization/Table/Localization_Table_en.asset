@@ -20,7 +20,7 @@ MonoBehaviour:
     - rid: 9220491451600470084
   m_TableData:
   - m_Id: 579067019264
-    m_Localized: Time Walked:{0}
+    m_Localized: Time Walking:{0}
     m_Metadata:
       m_Items:
       - rid: 9220491451600470084
