@@ -21,6 +21,7 @@ AudioMixerController:
   m_AudioMixerGroupViews:
   - guids:
     - a7a9d617d13d2c948a5e452281a7562f
+    - 7b783672518feb949aa42fed6706548a
     name: View
   m_CurrentViewIndex: 0
   m_TargetSnapshot: {fileID: 24500006}
@@ -33,7 +34,8 @@ AudioMixerGroupController:
   m_Name: Master
   m_AudioMixer: {fileID: 24100000}
   m_GroupID: a7a9d617d13d2c948a5e452281a7562f
-  m_Children: []
+  m_Children:
+  - {fileID: 6566324288889629988}
   m_Volume: 802634f216091f8498677d22a000e08d
   m_Pitch: f5e651ddb20c2074aab5d2ca47ec1232
   m_Send: 00000000000000000000000000000000
@@ -67,5 +69,58 @@ AudioMixerSnapshotController:
   m_AudioMixer: {fileID: 24100000}
   m_SnapshotID: 70612f6f6a195c24e87bf4e674758df9
   m_FloatValues:
+    0a63acb09c4a833449dc2ff1c74face3: 2000
+    745fd7c2243e1424a8bd3882fffc5495: -3089
     802634f216091f8498677d22a000e08d: 0.27000841
+    4ba969234dc875d468981fac1f202ab6: 0
+    44fb1a64bfd998a4094c37a183d1e6a8: 1000
+    e621e974ff0e7a64b93bda9f6f841782: 0.1
+    d80851d58dc43bf4baba47a99ee026b5: 0
+    73d150199d3433246853805ab0754db1: 0
+    10e3181976ec352458f524ae2b5eee00: 100
+    4ceaf4993a6185444885d54d5aba598b: 3000
+    76b27da943a5fec4a873d39ba7c33e3e: 0
+    3e36b3d94b4619648ace994feb063c92: 2292
+    d92cc0f96d5333548aab978188b9fb37: 20
+    33b33ffb3fadc7341af87b3178efdd7e: -10000
+    53f1fc1c80277164692a4f0653ee8ae1: 2
+    e47ef55cd50795f4abd5c3c083b143c2: 1000
+    71f7f88c2d5d68d438d3ded520b5baf3: 0.3
+    5232503d691e2af41b324fb973b9910b: 0
+    eb6c754d17d6f344db449a87643e9a3e: 0.13552584
+    3dd8016e3efb43241b03e68f7649065f: 20000
+    8abfa92f0b5cdbc4b83ce938257934e1: 1.87
   m_TransitionOverrides: {}
+--- !u!244 &2703296438753268239
+AudioMixerEffectController:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_EffectID: b9ca60640af8f2e45b2cddd234d0dd6b
+  m_EffectName: Attenuation
+  m_MixLevel: 67bc16bd99d3d4941b42c489f5b3af54
+  m_Parameters: []
+  m_SendTarget: {fileID: 0}
+  m_EnableWetMix: 0
+  m_Bypass: 0
+--- !u!243 &6566324288889629988
+AudioMixerGroupController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Sound_Event
+  m_AudioMixer: {fileID: 24100000}
+  m_GroupID: 7b783672518feb949aa42fed6706548a
+  m_Children: []
+  m_Volume: eb6c754d17d6f344db449a87643e9a3e
+  m_Pitch: 14ccc0a30e8a388498ee4f162a237d15
+  m_Send: 00000000000000000000000000000000
+  m_Effects:
+  - {fileID: 2703296438753268239}
+  m_UserColorIndex: 0
+  m_Mute: 0
+  m_Solo: 0
+  m_BypassEffects: 0
