@@ -4,13 +4,18 @@ using UnityEngine;
 [RequireComponent(typeof(Grid))]
 public class HallwayGenerator : MonoBehaviour
 {
-    Hashtable hallwayPositions = new Hashtable();
-
+    [Header("Hallway Generation")]
     [SerializeField] Transform hallwayPrefab;
     [SerializeField] int hallwayChunkSize = 4;
-    [SerializeField] int hallwaySize = 4;
+    [SerializeField] int hallwayAmount = 4;
     Transform playerTransform;
+    Hashtable hallwayPositions = new Hashtable();
     Grid grid;
+
+    [Header("End game setting")]
+    [SerializeField] Transform endPrefab;
+    [SerializeField] uint distanceToTriggerEnd = 100;
+    float distanceWalked;
 
     private void Awake()
     {
@@ -39,23 +44,28 @@ public class HallwayGenerator : MonoBehaviour
     private void Update()
     {
         GenerateHallway();
+
+        // Calculate the player distance from start point
+        distanceWalked = Vector3.Distance(Vector3.zero, playerTransform.position);
+        Debug.Log("Distance walked: " + distanceWalked);
     }
 
     private void GenerateHallway()
     {
         float cTime = Time.realtimeSinceStartup;
 
-        for (int z = -hallwaySize; z < hallwaySize + 1; z++)
+        for (int z = -hallwayAmount; z < hallwayAmount + 1; z++)
         {
             Vector3 spawnPosition = new Vector3(0, 2, (z + grid.WorldToCell(playerTransform.position).z) * hallwayChunkSize);
 
             if (!hallwayPositions.ContainsKey(spawnPosition))
             {
+                // Instantiate hallway chunk
                 Transform hallwayTransform = Instantiate(hallwayPrefab, spawnPosition, Quaternion.identity, transform);
 
                 HallwayChunk hallwayChunk = new HallwayChunk(cTime, hallwayTransform);
-                Debug.Log(hallwayChunk.cTimeStamp + " " + hallwayChunk.hallwayTransform.position + " added");
 
+                // Add hallway chink to hastable
                 hallwayPositions.Add(spawnPosition, hallwayChunk);
             }
             else
@@ -79,6 +89,19 @@ public class HallwayGenerator : MonoBehaviour
         }
 
         hallwayPositions = newChunkPositions;
+
+        // End game trigger
+        if (distanceWalked > distanceToTriggerEnd)
+        {
+            Vector3 spawnPositionFront = new Vector3(0, 2, ((hallwayAmount + 1) + grid.WorldToCell(playerTransform.position).z) * hallwayChunkSize);
+            Vector3 spawnPositionBack = new Vector3(0, 2, ((-hallwayAmount - 1) + grid.WorldToCell(playerTransform.position).z) * hallwayChunkSize);
+            // Spawn final room
+            Instantiate(endPrefab, spawnPositionFront, Quaternion.Euler(0, 180, 0), transform);
+            Instantiate(endPrefab, spawnPositionBack, Quaternion.identity, transform);
+            Debug.Log("Hallway generation ended");
+
+            enabled = false;
+        }
     }
 
     private class HallwayChunk 
@@ -97,15 +120,13 @@ public class HallwayGenerator : MonoBehaviour
     {
         if (grid)
         {
-            for (int z = -hallwaySize; z < hallwaySize + 1; z++)
+            for (int z = -hallwayAmount; z < hallwayAmount + 1; z++)
             {
                 Vector3 spawnPosition = new Vector3(0, 2, (z + grid.WorldToCell(playerTransform.position).z) * hallwayChunkSize);
 
                 Gizmos.color = Color.red;
-                Gizmos.DrawSphere(spawnPosition, 1f);
+                Gizmos.DrawSphere(spawnPosition, .25f);
             }
         }
     }
-
-
 }
