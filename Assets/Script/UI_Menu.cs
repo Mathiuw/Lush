@@ -30,6 +30,18 @@ public class UI_Menu : MonoBehaviour
 
     private bool changeLanguageActive = false;
 
+    private void OnDisable()
+    {
+        localStringElapsedTime.StringChanged -= UpdateText;
+
+        if (player)
+        {
+            player.GetInput().Player.Exit.performed -= ToggleMenu;
+        }
+
+        StopAllCoroutines();
+    }
+
     private void Awake()
     {
         canvasGroup = GetComponent<CanvasGroup>();
@@ -45,7 +57,7 @@ public class UI_Menu : MonoBehaviour
         // Bind event to player pause bind if he exists
         if (player)
         {
-            player.GetInputActions_Player().Player.Exit.performed += ToggleMenu;
+            player.GetInput().Player.Exit.performed += ToggleMenu;
         }
         else
         {
@@ -60,29 +72,31 @@ public class UI_Menu : MonoBehaviour
         {
             Debug.LogError("Cant find timer");
         }
-
-        // Set the argument for the timer text
-        localStringElapsedTime.Arguments = new object[] { timer.GetElapsedTime() };
-        localStringElapsedTime.StringChanged += UpdateText;
+        else
+        {
+            // Set the argument for the timer text
+            localStringElapsedTime.Arguments = new object[] { timer.GetElapsedTime() };
+            localStringElapsedTime.StringChanged += UpdateText;
+            StartCoroutine(UpdateTimer());
+        }
 
         // Tries to load saved settings
         LoadGame();
     }
 
-    private void Update()
+    IEnumerator UpdateTimer() 
     {
-        // Updates timer text
-        int elapsedTime = Mathf.FloorToInt(timer.GetElapsedTime());
+        while (true)
+        {
+            // Updates timer text
+            int elapsedTime = Mathf.FloorToInt(timer.GetElapsedTime());
 
-        int minutes = elapsedTime / 60;
-        int seconds = elapsedTime % 60;
-        localStringElapsedTime.Arguments[0] = string.Format("{0:00}:{1:00}", minutes, seconds);
-        localStringElapsedTime.RefreshString();
-    }
-
-    private void OnDisable()
-    {
-        localStringElapsedTime.StringChanged -= UpdateText;
+            int minutes = elapsedTime / 60;
+            int seconds = elapsedTime % 60;
+            localStringElapsedTime.Arguments[0] = string.Format("{0:00}:{1:00}", minutes, seconds);
+            localStringElapsedTime.RefreshString();
+            yield return new WaitForSeconds(0.1f);
+        }
     }
 
     // Open and close menu
@@ -90,6 +104,8 @@ public class UI_Menu : MonoBehaviour
     {
         if (canvasGroup.alpha == 0)
         {
+            //Unlocks mouse
+            Cursor.lockState = CursorLockMode.None;
             // Pause the game
             Time.timeScale = 0;
             // Disable audio
@@ -102,6 +118,8 @@ public class UI_Menu : MonoBehaviour
         }
         else
         {
+            // Locks mouse
+            Cursor.lockState = CursorLockMode.Locked;
             // Unpause the game
             Time.timeScale = 1;
             // Enable audio

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7490288240167831283}
   - component: {fileID: 1190313565887142271}
   m_Layer: 0
-  m_Name: Event_Manager
+  m_Name: Sound_Events_Manager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -45,11 +45,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   events:
-  - eventObject: {fileID: 8226476773105168328, guid: 6eedf19e5e746ec448b847552cdbbb42, type: 3}
-    minutesToTrigger: 0.4
-  - eventObject: {fileID: 1355098166680855672, guid: aee0ded7ab1ca2c4697d0d1a480b7cac, type: 3}
+  - eventObject: {fileID: 3256305328756463517, guid: aee0ded7ab1ca2c4697d0d1a480b7cac, type: 3}
     minutesToTrigger: 0.3
-  - eventObject: {fileID: 4800717306018588539, guid: f71f1871ce52a5c4a8aa4568de039307, type: 3}
+    triggerToEndScene: 1
+  - eventObject: {fileID: 9034621210569790622, guid: f71f1871ce52a5c4a8aa4568de039307, type: 3}
     minutesToTrigger: 0.2
-  - eventObject: {fileID: 4478310359641453925, guid: 0a2cbc2d397f61f46b602d7701746563, type: 3}
+    triggerToEndScene: 0
+  - eventObject: {fileID: 133095197362308736, guid: 0a2cbc2d397f61f46b602d7701746563, type: 3}
     minutesToTrigger: 0.1
+    triggerToEndScene: 0

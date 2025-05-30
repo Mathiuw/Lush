@@ -1,12 +1,14 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 [Serializable]
 struct Event
 {
-    public Transform eventObject;
+    public SoundEvent eventObject;
     public float minutesToTrigger;
+    public bool triggerToEndScene;
 }
 
 public class Event_Manager : MonoBehaviour
@@ -16,6 +18,7 @@ public class Event_Manager : MonoBehaviour
 
     private void Start()
     {
+        // Tries to find timer
         timer = FindAnyObjectByType<Timer>();
 
         if (!timer)
@@ -29,13 +32,30 @@ public class Event_Manager : MonoBehaviour
     {
         for (int i = 0; i < events.Count; i++)
         {
+            // Return if there are no sound events to trigger
             if (events.Count == 0) break;
 
+            // Check for each sound event on the list for if there any event to trigger
             if ((timer.GetElapsedTime() / 60) > events[i].minutesToTrigger)
             {
-                Instantiate(events[i].eventObject, Vector3.zero, Quaternion.identity);
+                // Spawn the sound event
+                SoundEvent soundEvent = Instantiate(events[i].eventObject, Vector3.zero, Quaternion.identity);
+
+                // If the sound event triggers to next scene, the ChangeToEndScene() function will trigger after the event finishes
+                if (events[i].triggerToEndScene)
+                {
+                    soundEvent.onEventEnd += ChangeToEndScene;
+                }
+
                 events.Remove(events[i]);
             }
         }
     }
+
+    private void ChangeToEndScene() 
+    {
+        // Change game scene to the next scene on the build index
+        SceneManager.LoadScene( SceneManager.GetActiveScene().buildIndex + 1);
+    }
+
 }

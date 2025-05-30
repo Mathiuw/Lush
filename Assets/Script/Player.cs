@@ -44,30 +44,6 @@ public class Player : MonoBehaviour
     AudioSource footstepSound;
     float maxVolume;
 
-    private void Awake()
-    {
-        // Lock Cursor
-        Cursor.lockState = CursorLockMode.Locked;
-
-        // Get camera transform
-        playerCamera = GetComponentInChildren<Camera>().transform;
-
-        // Get character controller component
-        characterController = GetComponent<CharacterController>();
-
-        // Get the audio source component from player feet
-        footstepSound = GetComponentInChildren<AudioSource>();
-        maxVolume = footstepSound.volume;
-        footstepSound.volume = 0;
-
-        if (!characterController)
-        {
-            Debug.LogError("Cant find character controller");
-            enabled = false;
-            return;
-        }
-    }
-
     private void OnMovePerformed(InputAction.CallbackContext callbackContext)
     {
         MoveInput = callbackContext.ReadValue<Vector2>();
@@ -88,20 +64,8 @@ public class Player : MonoBehaviour
         lookInput = Vector2.zero;
     }
 
-    private void OnMenuToggle(bool toggle) 
+    public InputActions_Player GetInput() 
     {
-        if (toggle)
-        {
-            Cursor.lockState = CursorLockMode.None;
-        }
-        else
-        {
-            Cursor.lockState = CursorLockMode.Locked;
-        }
-    }
-
-    public InputActions_Player GetInputActions_Player() 
-    { 
         return inputActions;
     }
 
@@ -149,10 +113,28 @@ public class Player : MonoBehaviour
         inputActions.Disable();
     }
 
-    private void Start()
+    private void Awake()
     {
-        // Bind event on ment toggle
-        UI_Menu.onMenuToggle += OnMenuToggle;
+        // Lock Cursor
+        Cursor.lockState = CursorLockMode.Locked;
+
+        // Get camera transform
+        playerCamera = GetComponentInChildren<Camera>().transform;
+
+        // Get character controller component
+        characterController = GetComponent<CharacterController>();
+
+        // Get the audio source component from player feet
+        footstepSound = GetComponentInChildren<AudioSource>();
+        maxVolume = footstepSound.volume;
+        footstepSound.volume = 0;
+
+        if (!characterController)
+        {
+            Debug.LogError("Cant find character controller");
+            enabled = false;
+            return;
+        }
     }
 
     private void Update()

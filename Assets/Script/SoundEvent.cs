@@ -3,6 +3,9 @@ using UnityEngine;
 [RequireComponent (typeof(AudioSource))]
 public class SoundEvent : MonoBehaviour
 {
+    public delegate void OnEventEnd();
+    public event OnEventEnd onEventEnd;
+
     AudioSource audioSource;
     Player player;
     Vector3 desiredPosition;
@@ -46,7 +49,7 @@ public class SoundEvent : MonoBehaviour
 
             if (destroyIfTooClose && Vector3.Distance(transform.position, player.transform.position) < distanceToDestroy)
             {
-                Destroy(gameObject);
+                OnAudioEnd();
             }
         }
         else 
@@ -60,7 +63,9 @@ public class SoundEvent : MonoBehaviour
     private void OnAudioEnd() 
     {
         if (audioSource.loop) return;
-        
+
+        onEventEnd?.Invoke();
+
         Destroy(gameObject);
     }
 
