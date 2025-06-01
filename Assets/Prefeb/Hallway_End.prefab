@@ -16,7 +16,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &4331523194052123011
 Transform:
@@ -215,7 +215,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2100000, guid: ee135ebe57f020b4faefe1450abb959a, type: 2}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: -4730915833291688666, guid: 2a5fcdcfa2541f448981f668c2108333, type: 3}
+    - {fileID: -196314479748554285, guid: 2a5fcdcfa2541f448981f668c2108333, type: 3}
+    - {fileID: -9057262245602195802, guid: 2a5fcdcfa2541f448981f668c2108333, type: 3}
+    - {fileID: 5621545317397213646, guid: 2a5fcdcfa2541f448981f668c2108333, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 2a5fcdcfa2541f448981f668c2108333, type: 3}
       insertIndex: -1
@@ -240,7 +244,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963524136357525814}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: abffe5b8539567347b6701dec40e1a26, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0

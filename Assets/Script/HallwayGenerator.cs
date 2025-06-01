@@ -6,6 +6,7 @@ public class HallwayGenerator : MonoBehaviour
 {
     [Header("Hallway Generation")]
     [SerializeField] Transform hallwayPrefab;
+    [SerializeField] Transform hallwayPipes;
     [SerializeField] int hallwayChunkSize = 4;
     [SerializeField] int hallwayAmount = 4;
     Transform playerTransform;
@@ -93,11 +94,15 @@ public class HallwayGenerator : MonoBehaviour
         // End game trigger
         if (distanceWalked > distanceToTriggerEnd)
         {
-            Vector3 spawnPositionFront = new Vector3(0, 2, ((hallwayAmount + 1) + grid.WorldToCell(playerTransform.position).z) * hallwayChunkSize);
-            Vector3 spawnPositionBack = new Vector3(0, 2, ((-hallwayAmount - 1) + grid.WorldToCell(playerTransform.position).z) * hallwayChunkSize);
             // Spawn final room
+            // Front
+            Vector3 spawnPositionFront = new Vector3(0, 2, ((hallwayAmount + 1) + grid.WorldToCell(playerTransform.position).z) * hallwayChunkSize);
             Instantiate(endPrefab, spawnPositionFront, Quaternion.Euler(0, 180, 0), transform);
+            Instantiate(hallwayPipes, spawnPositionFront, Quaternion.Euler(0, 0, 0), transform);
+            // Back
+            Vector3 spawnPositionBack = new Vector3(0, 2, ((-hallwayAmount - 1) + grid.WorldToCell(playerTransform.position).z) * hallwayChunkSize);
             Instantiate(endPrefab, spawnPositionBack, Quaternion.identity, transform);
+            Instantiate(hallwayPipes, spawnPositionBack, Quaternion.Euler(0, 0, 0), transform);
             Debug.Log("Hallway generation ended");
 
             enabled = false;

@@ -41,7 +41,8 @@ public class Player : MonoBehaviour
     // Sound Variables
     [Header("Audio")]
     [SerializeField] float footstepFadeSpeed = 10;
-    AudioSource footstepSound;
+    //[SerializeField] FootStepSound[] footStepSounds;
+    AudioSource footstepSoundSource;
     float maxVolume;
 
     private void OnMovePerformed(InputAction.CallbackContext callbackContext)
@@ -125,9 +126,9 @@ public class Player : MonoBehaviour
         characterController = GetComponent<CharacterController>();
 
         // Get the audio source component from player feet
-        footstepSound = GetComponentInChildren<AudioSource>();
-        maxVolume = footstepSound.volume;
-        footstepSound.volume = 0;
+        footstepSoundSource = GetComponentInChildren<AudioSource>();
+        maxVolume = footstepSoundSource.volume;
+        footstepSoundSource.volume = 0;
 
         if (!characterController)
         {
@@ -152,12 +153,12 @@ public class Player : MonoBehaviour
             playerCamera.localPosition = HeadBob(bobTime);
         }
 
-        FootstepAudio();
+        //SetFootstepSound();
+        FootstepAudioVolume();
     }
 
     private void PlayerMovement() 
     {
-
         // Gravity
         grounded = Physics.CheckSphere(transform.position + Vector3.down + Vector3.up * sphereOffset, sphereRadius, groundMask);
 
@@ -201,7 +202,48 @@ public class Player : MonoBehaviour
         return position;
     }
 
-    private void FootstepAudio() 
+    //[Serializable]
+    //public struct FootStepSound
+    //{
+    //    public PhysicsMaterial physicsMaterial;
+    //    public AudioClip clip;
+    //    public float pitch;
+    //}
+
+    //private void SetFootstepSound()
+    //{
+    //    Collider[] colliders = Physics.OverlapSphere(transform.position + Vector3.down + Vector3.up * sphereOffset, sphereRadius, groundMask);
+    //    Debug.Log("Colliders: " + colliders.Length);
+
+    //    if (colliders.Length == 0) return;
+
+    //    foreach (Collider collider in colliders)
+    //    {
+    //        PhysicsMaterial physicsMaterial = collider.material;
+
+    //        for (int i = 0; i < footStepSounds.Length; i++)
+    //        {
+    //            PhysicsMaterial pmt = footStepSounds[i].physicsMaterial;
+
+    //            Debug.Log(physicsMaterial);
+    //            Debug.Log(pmt);
+
+    //            if (physicsMaterial == pmt)
+    //            {
+    //                footstepSoundSource.clip = footStepSounds[i].clip;
+    //                footstepSoundSource.pitch = footStepSounds[i].pitch;
+    //                footstepSoundSource.Play();
+    //            }
+    //        }
+    //    }
+
+    //    if (footstepSoundSource.clip == null)
+    //    {
+    //        Debug.LogWarning("Didnt find any surface with sound");
+    //    }
+    //}
+
+    private void FootstepAudioVolume() 
     {
         float desiredVolume;
 
@@ -214,7 +256,7 @@ public class Player : MonoBehaviour
             desiredVolume = 0;
         }
 
-        footstepSound.volume = Mathf.Lerp(footstepSound.volume, desiredVolume, Time.deltaTime * footstepFadeSpeed);
+        footstepSoundSource.volume = Mathf.Lerp(footstepSoundSource.volume, desiredVolume, Time.deltaTime * footstepFadeSpeed);
     }
 
     // DEBUG gizmos draw

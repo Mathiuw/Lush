@@ -951,6 +951,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4185592186225404484, guid: 8f206b2dc64e79a41a1237555db0c502, type: 3}
+      propertyPath: m_Pitch
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4185592186225404484, guid: 8f206b2dc64e79a41a1237555db0c502, type: 3}
+      propertyPath: m_Resource
+      value: 
+      objectReference: {fileID: 8300000, guid: 7101c1fe780f13c47859ffe61b6b435f, type: 3}
+    - target: {fileID: 4185592186225404484, guid: 8f206b2dc64e79a41a1237555db0c502, type: 3}
+      propertyPath: m_audioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 7101c1fe780f13c47859ffe61b6b435f, type: 3}
     - target: {fileID: 4685878241686608680, guid: 8f206b2dc64e79a41a1237555db0c502, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1047,6 +1059,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hallwayPrefab: {fileID: 5590631585868376798, guid: 10bc1635f78bf70488f9bbd4248f8f45, type: 3}
+  hallwayPipes: {fileID: 4801698620522626511, guid: da650263eb298dd4ca0afdb055fb6355, type: 3}
   hallwayChunkSize: 4
   hallwayAmount: 6
   endPrefab: {fileID: 3223673474615859930, guid: 63e355d0d1d65a44b879e684a559c7c1, type: 3}
