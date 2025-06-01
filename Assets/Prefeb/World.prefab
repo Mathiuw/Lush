@@ -47,6 +47,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   showGizmos: 0
   chunk: {fileID: 9201598022883144477, guid: 7f00e8a8236619f42b59d7f1f99b5d2e, type: 3}
+  terrainMaterial: {fileID: 13400000, guid: 4a3b231eae59de049b601284369bdbbe, type: 2}
   worldSize: 3
   noiseHeight: 5
   detailScale: 10
