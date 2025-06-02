@@ -1,21 +1,27 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.ProBuilder;
 using UnityEngine.SceneManagement;
 
 [Serializable]
-struct Event
+public struct Event
 {
     public SoundEvent eventObject;
     public float minutesToTrigger;
     public bool triggerToEndScene;
 }
 
-public class Event_Manager : MonoBehaviour
+public class EventManager : MonoBehaviour
 {
     [SerializeField] List<Event> events = new List<Event>();
     Timer timer;
 
+    public List<Event> GetEvents() 
+    {
+        return events;
+    }
+    
     private void Start()
     {
         // Tries to find timer
@@ -45,6 +51,7 @@ public class Event_Manager : MonoBehaviour
                 if (events[i].triggerToEndScene)
                 {
                     soundEvent.onEventEnd += ChangeToEndScene;
+                    soundEvent.onEventEnd += SetBlackFade;
                 }
 
                 events.Remove(events[i]);
@@ -58,4 +65,11 @@ public class Event_Manager : MonoBehaviour
         SceneManager.LoadScene( SceneManager.GetActiveScene().buildIndex + 1);
     }
 
+    private void SetBlackFade()
+    {
+        UI_Fade fade = FindAnyObjectByType<UI_Fade>();
+
+        fade.SetFadeValue(1);
+        Debug.Log("Set fade to 1");
+    }
 }

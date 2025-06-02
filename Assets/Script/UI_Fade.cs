@@ -6,7 +6,8 @@ public class UI_Fade : MonoBehaviour
     enum FadeType
     {
         FadeIn,
-        FadeOut
+        FadeOut,
+        Paused
     }
 
     [SerializeField] FadeType fadeType;
@@ -26,6 +27,18 @@ public class UI_Fade : MonoBehaviour
         }
     }
 
+    public void SetFadeValue(float value) 
+    {
+        fadeType = FadeType.Paused;
+
+        value = Mathf.Clamp01(value);
+
+        Color imageColor = image.color;
+        imageColor.a = value;
+
+        image.color = imageColor;
+    }
+
     private void Update()
     {
         Color imageColor = image.color;
@@ -37,6 +50,8 @@ public class UI_Fade : MonoBehaviour
                 break;
             case FadeType.FadeOut:
                 imageColor.a -= Time.deltaTime / fadeTime;
+                break;
+            case FadeType.Paused:
                 break;
             default:
                 break;
