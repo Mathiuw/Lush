@@ -15,22 +15,23 @@ public class EndTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (hud)
-        {
-            Destroy(hud.gameObject);
-        }
+        //if (hud)
+        //{
+        //    Destroy(hud.gameObject);
+        //}
 
-        if (end_cutscene)
-        {
-            end_cutscene.Play();
-        }
-        else
-        {
-            Debug.LogError("Cant find fade image");
-        }
+        //if (end_cutscene)
+        //{
+        //    end_cutscene.Play();
+        //}
+        //else
+        //{
+        //    Debug.LogError("Cant find fade image");
+        //}
 
         Debug.Log("Game Ended");
+        Application.Quit();
 
-        enabled = false;
+        //enabled = false;
     }
 }

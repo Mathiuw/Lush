@@ -251,6 +251,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4185592186225404484, guid: 8f206b2dc64e79a41a1237555db0c502, type: 3}
+      propertyPath: m_Volume
+      value: 0.35
+      objectReference: {fileID: 0}
     - target: {fileID: 4685878241686608680, guid: 8f206b2dc64e79a41a1237555db0c502, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -344,6 +348,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1131871366}
   - component: {fileID: 1131871365}
+  - component: {fileID: 1131871367}
   m_Layer: 0
   m_Name: Ambience_Sound
   m_TagString: Untagged
@@ -364,7 +369,7 @@ AudioSource:
   m_audioClip: {fileID: 8300000, guid: 4546a75d2c697fa42bbef85b06aa21ce, type: 3}
   m_Resource: {fileID: 8300000, guid: 4546a75d2c697fa42bbef85b06aa21ce, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.01
+  m_Volume: 0.175
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -463,6 +468,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1131871367
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1131871364}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa382b5ac6a34454cb70ba8909b63aa5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &1135715186 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8765368778460815009, guid: fedf6e494aebfbc48a06e5a106b8b081, type: 3}
