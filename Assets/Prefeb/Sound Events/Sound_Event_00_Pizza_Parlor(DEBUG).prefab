@@ -10,7 +10,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1122506118989179882, guid: a05dbcccc726dbf4a8861fcfd9f008bc, type: 3}
       propertyPath: m_Name
-      value: Sound_Event_Pizza_Parlor(DEBUG)
+      value: Sound_Event_00_Pizza_Parlor(DEBUG)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3835831660372456420, guid: a05dbcccc726dbf4a8861fcfd9f008bc, type: 3}
+      propertyPath: Priority
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3835831660372456420, guid: a05dbcccc726dbf4a8861fcfd9f008bc, type: 3}
       propertyPath: m_Resource

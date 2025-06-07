@@ -45,12 +45,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   events:
+  - eventObject: {fileID: 9034621210569790622, guid: f71f1871ce52a5c4a8aa4568de039307, type: 3}
+    minutesToTrigger: 0.1
+    triggerToEndScene: 0
+  - eventObject: {fileID: 133095197362308736, guid: 0a2cbc2d397f61f46b602d7701746563, type: 3}
+    minutesToTrigger: 0.2
+    triggerToEndScene: 0
   - eventObject: {fileID: 3256305328756463517, guid: aee0ded7ab1ca2c4697d0d1a480b7cac, type: 3}
     minutesToTrigger: 0.3
     triggerToEndScene: 1
-  - eventObject: {fileID: 9034621210569790622, guid: f71f1871ce52a5c4a8aa4568de039307, type: 3}
-    minutesToTrigger: 0.2
-    triggerToEndScene: 0
-  - eventObject: {fileID: 133095197362308736, guid: 0a2cbc2d397f61f46b602d7701746563, type: 3}
-    minutesToTrigger: 0.1
-    triggerToEndScene: 0
