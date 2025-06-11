@@ -11,6 +11,7 @@ public class SoundEvent : MonoBehaviour
     Vector3 desiredPosition;
     [SerializeField] bool approaching = false;
     [SerializeField] bool destroyIfTooClose = false;
+    [SerializeField] float distanceScale = 1.0f;
     [SerializeField] float distanceToDestroy = .2f;
     [SerializeField] float speed = 1.0f;
     float x;
@@ -31,8 +32,8 @@ public class SoundEvent : MonoBehaviour
             enabled = false;
         }
 
-        x = Random.Range(-10, -15);
-        z = Random.Range(-20, 20);
+        x = Random.Range(-10, -15) * distanceScale;
+        z = Random.Range(-20, 20) * distanceScale;
 
         desiredPosition = player.transform.position + (player.transform.forward * x) + (player.transform.right * z);
         transform.position = desiredPosition;

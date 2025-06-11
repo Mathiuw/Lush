@@ -18,7 +18,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3835831660372456420, guid: a05dbcccc726dbf4a8861fcfd9f008bc, type: 3}
       propertyPath: m_Volume
-      value: 0.125
+      value: 0.005
       objectReference: {fileID: 0}
     - target: {fileID: 3835831660372456420, guid: a05dbcccc726dbf4a8861fcfd9f008bc, type: 3}
       propertyPath: m_Resource
@@ -94,7 +94,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7549396049274905502, guid: a05dbcccc726dbf4a8861fcfd9f008bc, type: 3}
       propertyPath: distanceToDestroy
-      value: 2.75
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

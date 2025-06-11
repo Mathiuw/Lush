@@ -1,21 +1,22 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.ProBuilder;
 using UnityEngine.SceneManagement;
 
 [Serializable]
 public struct Event
 {
     public SoundEvent eventObject;
-    public float minutesToTrigger;
-    public bool triggerToEndScene;
+    public int checkpointIndexTrigger;
+    //public float minutesToTrigger;
+    public bool triggerEndScene;
 }
 
 public class EventManager : MonoBehaviour
 {
     [SerializeField] List<Event> events = new List<Event>();
-    Timer timer;
+    //Timer timer;
+    Checkpoints checkpoints;
 
     public List<Event> GetEvents() 
     {
@@ -25,47 +26,81 @@ public class EventManager : MonoBehaviour
     private void Start()
     {
         // Tries to find timer
-        timer = FindAnyObjectByType<Timer>();
+        //timer = FindAnyObjectByType<Timer>();
 
-        if (!timer)
+        //if (!timer)
+        //{
+        //    Debug.LogError("Cant find timer");
+        //    enabled = false;
+        //}
+
+        checkpoints = FindAnyObjectByType<Checkpoints>();
+
+        if (!checkpoints)
         {
-            Debug.LogError("Cant find timer");
+            Debug.LogError("cant find checkpoints");
             enabled = false;
+            return;
         }
+
+        checkpoints.OnCheckpointClear += OnCheckpointClear;
     }
 
-    private void Update()
+    private void OnCheckpointClear()
     {
         for (int i = 0; i < events.Count; i++)
         {
-            // Return if there are no sound events to trigger
-            if (events.Count == 0) break;
-
-            // Check for each sound event on the list for if there any event to trigger
-            if ((timer.GetElapsedTime() / 60) > events[i].minutesToTrigger)
+            if (events[i].checkpointIndexTrigger == checkpoints.GetCheckpointIndex())
             {
-                // Spawn the sound event
                 SoundEvent soundEvent = Instantiate(events[i].eventObject, Vector3.zero, Quaternion.identity);
 
-                // If the sound event triggers to next scene, the ChangeToEndScene() function will trigger after the event finishes
-                if (events[i].triggerToEndScene)
+                if (events[i].triggerEndScene)
                 {
                     soundEvent.onEventEnd += ChangeToEndScene;
-                    soundEvent.onEventEnd += SetBlackFade;
+                    soundEvent.onEventEnd += SetFadeToBlack;
                 }
 
                 events.Remove(events[i]);
             }
+            else
+            {
+                continue;
+            }
         }
     }
+
+    //private void Update()
+    //{
+    //    for (int i = 0; i < events.Count; i++)
+    //    {
+    //        // Return if there are no sound events to trigger
+    //        if (events.Count == 0) break;
+
+    //        // Check for each sound event on the list for if there any event to trigger
+    //        if ((timer.GetElapsedTime() / 60) > events[i].minutesToTrigger)
+    //        {
+    //            // Spawn the sound event
+    //            SoundEvent soundEvent = Instantiate(events[i].eventObject, Vector3.zero, Quaternion.identity);
+
+    //            // If the sound event triggers to next scene, the ChangeToEndScene() function will trigger after the event finishes
+    //            if (events[i].triggerToEndScene)
+    //            {
+    //                soundEvent.onEventEnd += ChangeToEndScene;
+    //                soundEvent.onEventEnd += SetBlackFade;
+    //            }
+
+    //            events.Remove(events[i]);
+    //        }
+    //    }
+    //}
 
     private void ChangeToEndScene() 
     {
         // Change game scene to the next scene on the build index
-        SceneManager.LoadScene( SceneManager.GetActiveScene().buildIndex + 1);
+        SceneManager.LoadScene("End");
     }
 
-    private void SetBlackFade()
+    private void SetFadeToBlack()
     {
         UI_Fade fade = FindAnyObjectByType<UI_Fade>();
 

@@ -13,6 +13,10 @@ PrefabInstance:
       value: Sound_Event_04_Running_Steps
       objectReference: {fileID: 0}
     - target: {fileID: 3835831660372456420, guid: a05dbcccc726dbf4a8861fcfd9f008bc, type: 3}
+      propertyPath: Priority
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 3835831660372456420, guid: a05dbcccc726dbf4a8861fcfd9f008bc, type: 3}
       propertyPath: m_Resource
       value: 
       objectReference: {fileID: 8300000, guid: f4c791921302e4b4fa562a07209065aa, type: 3}
@@ -22,12 +26,12 @@ PrefabInstance:
       objectReference: {fileID: 8300000, guid: f4c791921302e4b4fa562a07209065aa, type: 3}
     - target: {fileID: 3835831660372456420, guid: a05dbcccc726dbf4a8861fcfd9f008bc, type: 3}
       propertyPath: BypassEffects
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3835831660372456420, guid: a05dbcccc726dbf4a8861fcfd9f008bc, type: 3}
       propertyPath: OutputAudioMixerGroup
       value: 
-      objectReference: {fileID: 24300002, guid: a7c833e6c83ccb84ea263295400aad34, type: 2}
+      objectReference: {fileID: 8933343834686401343, guid: a7c833e6c83ccb84ea263295400aad34, type: 2}
     - target: {fileID: 6285381716432556155, guid: a05dbcccc726dbf4a8861fcfd9f008bc, type: 3}
       propertyPath: m_LocalPosition.x
       value: 1.55585
@@ -77,12 +81,16 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7549396049274905502, guid: a05dbcccc726dbf4a8861fcfd9f008bc, type: 3}
+      propertyPath: distanceScale
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7549396049274905502, guid: a05dbcccc726dbf4a8861fcfd9f008bc, type: 3}
       propertyPath: destroyIfTooClose
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7549396049274905502, guid: a05dbcccc726dbf4a8861fcfd9f008bc, type: 3}
       propertyPath: distanceToDestroy
-      value: 2.75
+      value: 0.75
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
