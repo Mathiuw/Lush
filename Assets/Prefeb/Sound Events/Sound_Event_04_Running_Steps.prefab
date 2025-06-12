@@ -19,11 +19,11 @@ PrefabInstance:
     - target: {fileID: 3835831660372456420, guid: a05dbcccc726dbf4a8861fcfd9f008bc, type: 3}
       propertyPath: m_Resource
       value: 
-      objectReference: {fileID: 8300000, guid: f4c791921302e4b4fa562a07209065aa, type: 3}
+      objectReference: {fileID: 8300000, guid: e09428c46a958d24398a03bff04b0d5e, type: 3}
     - target: {fileID: 3835831660372456420, guid: a05dbcccc726dbf4a8861fcfd9f008bc, type: 3}
       propertyPath: m_audioClip
       value: 
-      objectReference: {fileID: 8300000, guid: f4c791921302e4b4fa562a07209065aa, type: 3}
+      objectReference: {fileID: 8300000, guid: e09428c46a958d24398a03bff04b0d5e, type: 3}
     - target: {fileID: 3835831660372456420, guid: a05dbcccc726dbf4a8861fcfd9f008bc, type: 3}
       propertyPath: BypassEffects
       value: 0

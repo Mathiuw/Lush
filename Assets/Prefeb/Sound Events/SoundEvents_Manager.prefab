@@ -55,5 +55,5 @@ MonoBehaviour:
     checkpointIndexTrigger: 2
     triggerEndScene: 0
   - eventObject: {fileID: 3256305328756463517, guid: aee0ded7ab1ca2c4697d0d1a480b7cac, type: 3}
-    checkpointIndexTrigger: 0
+    checkpointIndexTrigger: 3
     triggerEndScene: 1

@@ -194,6 +194,11 @@ public class Player : MonoBehaviour
         playerCamera.localRotation = Quaternion.Euler(xlookRotation, 0, 0);
     }
 
+    public void FocusPlayerCameraOn(Transform target) 
+    {
+        playerCamera.LookAt(target);
+    }
+
     private Vector3 HeadBob(float time)
     {
         Vector3 position = Vector3.zero;
