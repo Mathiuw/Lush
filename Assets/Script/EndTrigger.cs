@@ -1,41 +1,31 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.Playables;
 
 public class EndTrigger : MonoBehaviour
 {
-    PlayableDirector end_cutscene;
-    Transform hud;
-
-    [SerializeField] Transform focusTransform;
-    [SerializeField] AudioSource glitchSound;
+    Transform focusTransform;
+    AudioSource glitchSound;
 
     private void Awake()
     {
-        end_cutscene = FindAnyObjectByType<PlayableDirector>();
+        focusTransform = transform.Find("Focus");
+        glitchSound = GetComponentInChildren<AudioSource>();
 
-        hud = GameObject.Find("HUD").transform;
+        if (!focusTransform)
+        {
+            Debug.LogError("Cant find transform");
+            enabled = false;
+        }
+        if (!glitchSound)
+        {
+            Debug.LogError("Cant find audio glitch audio");
+            enabled = false;
+        }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        //if (hud)
-        //{
-        //    Destroy(hud.gameObject);
-        //}
-
-        //if (end_cutscene)
-        //{
-        //    end_cutscene.Play();
-        //}
-        //else
-        //{
-        //    Debug.LogError("Cant find fade image");
-        //}
-
         StartCoroutine(EndGameCoroutine(other));
-
-        //enabled = false;
     }
 
     IEnumerator EndGameCoroutine(Collider other) 
@@ -44,10 +34,8 @@ public class EndTrigger : MonoBehaviour
 
         if (player)
         {
-            // Disable player input
-            player.GetInput().Disable();
             // Focus player camera on hanging rope
-            player.transform.LookAt(focusTransform);
+            player.FocusPlayerCamera(focusTransform);
             // Play glitching sound
             glitchSound.Play();
         }

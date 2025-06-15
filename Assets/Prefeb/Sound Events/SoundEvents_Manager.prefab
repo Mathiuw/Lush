@@ -54,6 +54,9 @@ MonoBehaviour:
   - eventObject: {fileID: 3256305328756463517, guid: 6a5fcd95d660d7a409aba78ac7ae0382, type: 3}
     checkpointIndexTrigger: 2
     triggerEndScene: 0
-  - eventObject: {fileID: 3256305328756463517, guid: aee0ded7ab1ca2c4697d0d1a480b7cac, type: 3}
+  - eventObject: {fileID: 133095197362308736, guid: 0169988902f801a459b5eb14c03c1a3d, type: 3}
     checkpointIndexTrigger: 3
+    triggerEndScene: 0
+  - eventObject: {fileID: 3256305328756463517, guid: aee0ded7ab1ca2c4697d0d1a480b7cac, type: 3}
+    checkpointIndexTrigger: 4
     triggerEndScene: 1

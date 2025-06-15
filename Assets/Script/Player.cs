@@ -140,7 +140,11 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
-        CameraMovement();
+        // If input is disabled, dont update the camera position
+        if (inputActions.asset.enabled)
+        {
+            CameraMovement();
+        }
         PlayerMovement();
 
         velocity = new Vector3(characterController.velocity.x, 0, characterController.velocity.z);
@@ -181,7 +185,6 @@ public class Player : MonoBehaviour
 
     private void CameraMovement()
     {
-
         float mouseX = lookInput.x * sensibility * Time.deltaTime;
         float mouseY = lookInput.y * sensibility * Time.deltaTime;
 
@@ -194,9 +197,19 @@ public class Player : MonoBehaviour
         playerCamera.localRotation = Quaternion.Euler(xlookRotation, 0, 0);
     }
 
-    public void FocusPlayerCameraOn(Transform target) 
+    public void FocusPlayerCamera(Transform target) 
     {
+        // Disable player input
+        inputActions.Disable();
+
+        // Rotate body to target
+        Quaternion bodyRotation = transform.rotation;
+        transform.LookAt(target);
+        transform.rotation = Quaternion.Euler(new Vector3(bodyRotation.eulerAngles.x, transform.rotation.eulerAngles.y, bodyRotation.eulerAngles.z));
+
+        // Rotate the camera to the target
         playerCamera.LookAt(target);
+        Debug.Log("Player focusing on target");
     }
 
     private Vector3 HeadBob(float time)
@@ -206,47 +219,6 @@ public class Player : MonoBehaviour
         //position.x += Mathf.Cos(time * frequency / 2) * amplitude;
         return position;
     }
-
-    //[Serializable]
-    //public struct FootStepSound
-    //{
-    //    public PhysicsMaterial physicsMaterial;
-    //    public AudioClip clip;
-    //    public float pitch;
-    //}
-
-    //private void SetFootstepSound()
-    //{
-    //    Collider[] colliders = Physics.OverlapSphere(transform.position + Vector3.down + Vector3.up * sphereOffset, sphereRadius, groundMask);
-    //    Debug.Log("Colliders: " + colliders.Length);
-
-    //    if (colliders.Length == 0) return;
-
-    //    foreach (Collider collider in colliders)
-    //    {
-    //        PhysicsMaterial physicsMaterial = collider.material;
-
-    //        for (int i = 0; i < footStepSounds.Length; i++)
-    //        {
-    //            PhysicsMaterial pmt = footStepSounds[i].physicsMaterial;
-
-    //            Debug.Log(physicsMaterial);
-    //            Debug.Log(pmt);
-
-    //            if (physicsMaterial == pmt)
-    //            {
-    //                footstepSoundSource.clip = footStepSounds[i].clip;
-    //                footstepSoundSource.pitch = footStepSounds[i].pitch;
-    //                footstepSoundSource.Play();
-    //            }
-    //        }
-    //    }
-
-    //    if (footstepSoundSource.clip == null)
-    //    {
-    //        Debug.LogWarning("Didnt find any surface with sound");
-    //    }
-    //}
 
     private void FootstepAudioVolume() 
     {
