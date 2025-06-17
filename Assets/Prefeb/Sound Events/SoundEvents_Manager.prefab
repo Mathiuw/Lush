@@ -58,8 +58,8 @@ MonoBehaviour:
     checkpointIndexTrigger: 3
     triggerEndScene: 0
   - eventObject: {fileID: 133095197362308736, guid: 4569599cdc04c8442806bf7f3c15ba14, type: 3}
-    checkpointIndexTrigger: 4
+    checkpointIndexTrigger: 3
     triggerEndScene: 0
   - eventObject: {fileID: 3256305328756463517, guid: aee0ded7ab1ca2c4697d0d1a480b7cac, type: 3}
-    checkpointIndexTrigger: 6
+    checkpointIndexTrigger: 4
     triggerEndScene: 1

@@ -1171,7 +1171,7 @@ MonoBehaviour:
   hallwayChunkSize: 4
   hallwayAmount: 6
   endPrefab: {fileID: 3223673474615859930, guid: 63e355d0d1d65a44b879e684a559c7c1, type: 3}
-  distanceToTriggerEnd: 10
+  distanceToTriggerEnd: 550
 --- !u!156049354 &1460490384
 Grid:
   m_ObjectHideFlags: 0

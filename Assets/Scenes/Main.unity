@@ -491,6 +491,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6154573482129107747, guid: 290a08f6513a4f64f9590b547bb12287, type: 3}
+      propertyPath: 'checkpointsDistance.Array.data[0]'
+      value: 145
+      objectReference: {fileID: 0}
+    - target: {fileID: 6154573482129107747, guid: 290a08f6513a4f64f9590b547bb12287, type: 3}
+      propertyPath: 'checkpointsDistance.Array.data[2]'
+      value: 280
+      objectReference: {fileID: 0}
+    - target: {fileID: 6154573482129107747, guid: 290a08f6513a4f64f9590b547bb12287, type: 3}
+      propertyPath: 'checkpointsDistance.Array.data[3]'
+      value: 120
+      objectReference: {fileID: 0}
+    - target: {fileID: 6154573482129107747, guid: 290a08f6513a4f64f9590b547bb12287, type: 3}
+      propertyPath: 'checkpointsDistance.Array.data[4]'
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 6583478198938961940, guid: 290a08f6513a4f64f9590b547bb12287, type: 3}
       propertyPath: soundContainer
       value: 
@@ -1076,14 +1092,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1190313565887142271, guid: 2b02cd536f5a7644fbf60121565aae16, type: 3}
-      propertyPath: events.Array.data[4].checkpointIndexTrigger
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 1190313565887142271, guid: 2b02cd536f5a7644fbf60121565aae16, type: 3}
-      propertyPath: events.Array.data[5].checkpointIndexTrigger
-      value: 4
-      objectReference: {fileID: 0}
     - target: {fileID: 6434157303334535788, guid: 2b02cd536f5a7644fbf60121565aae16, type: 3}
       propertyPath: m_Name
       value: Sound_Events_Manager
