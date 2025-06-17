@@ -143,8 +143,11 @@ public class Player : MonoBehaviour
         // If input is disabled, dont update the camera position
         if (inputActions.asset.enabled)
         {
+            // Apply camera movement
             CameraMovement();
         }
+        
+        // Apply player movement
         PlayerMovement();
 
         velocity = new Vector3(characterController.velocity.x, 0, characterController.velocity.z);
@@ -185,15 +188,15 @@ public class Player : MonoBehaviour
 
     private void CameraMovement()
     {
-        float mouseX = lookInput.x * sensibility * Time.deltaTime;
-        float mouseY = lookInput.y * sensibility * Time.deltaTime;
+        float mouseX = lookInput.x * sensibility;
+        float mouseY = lookInput.y * sensibility;
 
-        xlookRotation -= mouseY;
+        xlookRotation -= mouseY * Time.deltaTime;
 
         // Clamp x rotation value
         xlookRotation = Math.Clamp(xlookRotation, -89, 89);
 
-        transform.Rotate(Vector3.up * mouseX);
+        transform.Rotate(Vector3.up * (mouseX * Time.deltaTime));
         playerCamera.localRotation = Quaternion.Euler(xlookRotation, 0, 0);
     }
 

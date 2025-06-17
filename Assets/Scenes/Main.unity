@@ -491,14 +491,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6154573482129107747, guid: 290a08f6513a4f64f9590b547bb12287, type: 3}
-      propertyPath: checkpointsDistance.Array.size
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 6154573482129107747, guid: 290a08f6513a4f64f9590b547bb12287, type: 3}
-      propertyPath: 'checkpointsDistance.Array.data[4]'
-      value: 100
-      objectReference: {fileID: 0}
+    - target: {fileID: 6583478198938961940, guid: 290a08f6513a4f64f9590b547bb12287, type: 3}
+      propertyPath: soundContainer
+      value: 
+      objectReference: {fileID: 234180390}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

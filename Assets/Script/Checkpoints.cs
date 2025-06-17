@@ -40,7 +40,7 @@ public class Checkpoints : MonoBehaviour
         {
             // Trigger event
             OnCheckpointClear?.Invoke();
-            Debug.Log("Checkpoint cleared");
+            Debug.Log("Checkpoint " + checkpointIndex + " cleared");
 
             // Advance to next checkpoint
             checkpointIndex++;
