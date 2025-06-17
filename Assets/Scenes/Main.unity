@@ -129,13 +129,14 @@ GameObject:
   m_Component:
   - component: {fileID: 76331479}
   - component: {fileID: 76331480}
+  - component: {fileID: 76331481}
   m_Layer: 0
   m_Name: crickets_creek
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &76331479
 Transform:
   m_ObjectHideFlags: 0
@@ -164,13 +165,13 @@ AudioSource:
   m_audioClip: {fileID: 8300000, guid: 96e08099cbab60d42aa2797145110977, type: 3}
   m_Resource: {fileID: 8300000, guid: 96e08099cbab60d42aa2797145110977, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.75
+  m_Volume: 0.4
   m_Pitch: 1
   Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
-  Priority: 128
+  Priority: 154
   DopplerLevel: 1
   MinDistance: 1
   MaxDistance: 500
@@ -248,6 +249,18 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &76331481
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 76331478}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa382b5ac6a34454cb70ba8909b63aa5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &106179586
 GameObject:
   m_ObjectHideFlags: 0
@@ -258,13 +271,14 @@ GameObject:
   m_Component:
   - component: {fileID: 106179587}
   - component: {fileID: 106179588}
+  - component: {fileID: 106179589}
   m_Layer: 0
   m_Name: rural_wind
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &106179587
 Transform:
   m_ObjectHideFlags: 0
@@ -299,7 +313,7 @@ AudioSource:
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
-  Priority: 128
+  Priority: 113
   DopplerLevel: 1
   MinDistance: 1
   MaxDistance: 500
@@ -377,6 +391,18 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &106179589
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 106179586}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa382b5ac6a34454cb70ba8909b63aa5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &234180389
 GameObject:
   m_ObjectHideFlags: 0
@@ -464,6 +490,14 @@ PrefabInstance:
     - target: {fileID: 4830967316960160596, guid: 290a08f6513a4f64f9590b547bb12287, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6154573482129107747, guid: 290a08f6513a4f64f9590b547bb12287, type: 3}
+      propertyPath: checkpointsDistance.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6154573482129107747, guid: 290a08f6513a4f64f9590b547bb12287, type: 3}
+      propertyPath: 'checkpointsDistance.Array.data[4]'
+      value: 100
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1046,6 +1080,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1190313565887142271, guid: 2b02cd536f5a7644fbf60121565aae16, type: 3}
+      propertyPath: events.Array.data[4].checkpointIndexTrigger
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1190313565887142271, guid: 2b02cd536f5a7644fbf60121565aae16, type: 3}
+      propertyPath: events.Array.data[5].checkpointIndexTrigger
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 6434157303334535788, guid: 2b02cd536f5a7644fbf60121565aae16, type: 3}
       propertyPath: m_Name
       value: Sound_Events_Manager
@@ -1105,13 +1147,14 @@ GameObject:
   m_Component:
   - component: {fileID: 1689025511}
   - component: {fileID: 1689025512}
+  - component: {fileID: 1689025513}
   m_Layer: 0
   m_Name: pineforest_wind
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1689025511
 Transform:
   m_ObjectHideFlags: 0
@@ -1137,8 +1180,8 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 24300002, guid: a7c833e6c83ccb84ea263295400aad34, type: 2}
-  m_audioClip: {fileID: 8300000, guid: 602fd63c936e9b648b4c62d8230ffc21, type: 3}
-  m_Resource: {fileID: 8300000, guid: 602fd63c936e9b648b4c62d8230ffc21, type: 3}
+  m_audioClip: {fileID: 8300000, guid: fc4071487b67b4041ab72b4dc6ba7155, type: 3}
+  m_Resource: {fileID: 8300000, guid: fc4071487b67b4041ab72b4dc6ba7155, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
@@ -1224,6 +1267,18 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &1689025513
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1689025510}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa382b5ac6a34454cb70ba8909b63aa5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1770817322
 GameObject:
   m_ObjectHideFlags: 0
@@ -1432,6 +1487,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2041480599}
   - component: {fileID: 2041480600}
+  - component: {fileID: 2041480601}
   m_Layer: 0
   m_Name: forest_trees_rustling_in_the_wind
   m_TagString: Untagged
@@ -1463,7 +1519,7 @@ AudioSource:
   m_GameObject: {fileID: 2041480598}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -19839116871510561, guid: a7c833e6c83ccb84ea263295400aad34, type: 2}
   m_audioClip: {fileID: 8300000, guid: 8a12a469948093c47aa24ca445ffe5fd, type: 3}
   m_Resource: {fileID: 8300000, guid: 8a12a469948093c47aa24ca445ffe5fd, type: 3}
   m_PlayOnAwake: 1
@@ -1473,7 +1529,7 @@ AudioSource:
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
-  Priority: 128
+  Priority: 170
   DopplerLevel: 1
   MinDistance: 1
   MaxDistance: 500
@@ -1551,6 +1607,18 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &2041480601
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2041480598}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa382b5ac6a34454cb70ba8909b63aa5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &171071746677867038
 PrefabInstance:
   m_ObjectHideFlags: 0

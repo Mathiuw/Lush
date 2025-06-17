@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 6285381716432556155}
   - component: {fileID: 3835831660372456420}
   - component: {fileID: 7549396049274905502}
+  - component: {fileID: 7642800560210362669}
   m_Layer: 0
   m_Name: Sound_Event_Base
   m_TagString: Untagged
@@ -42,7 +43,7 @@ AudioSource:
   m_GameObject: {fileID: 1122506118989179882}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 6566324288889629988, guid: a7c833e6c83ccb84ea263295400aad34, type: 2}
+  OutputAudioMixerGroup: {fileID: 8933343834686401343, guid: a7c833e6c83ccb84ea263295400aad34, type: 2}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 0
@@ -144,5 +145,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   approaching: 0
   destroyIfTooClose: 0
+  distanceScale: 1
   distanceToDestroy: 0.2
   speed: 1
+--- !u!114 &7642800560210362669
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1122506118989179882}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa382b5ac6a34454cb70ba8909b63aa5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

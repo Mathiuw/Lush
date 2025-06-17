@@ -61,6 +61,7 @@ public class EventManager : MonoBehaviour
                 }
 
                 events.Remove(events[i]);
+                i--;
             }
             else
             {
