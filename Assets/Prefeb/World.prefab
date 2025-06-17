@@ -53,10 +53,11 @@ MonoBehaviour:
   detailScale: 10
   chunkSize: 20
   scatterTrees: 1
-  tree: {fileID: 6472695018467320297, guid: 671e94efaf55c054eaf75765e8bda21b, type: 3}
+  tree: {fileID: 4494386416986899738, guid: 671e94efaf55c054eaf75765e8bda21b, type: 3}
   amountPerChunk: 10
   amountVariation: 2
   scaleVariation: 1
+  colorVariation: 0.2
 --- !u!156049354 &7543268071015711162
 Grid:
   m_ObjectHideFlags: 0

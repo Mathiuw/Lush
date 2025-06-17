@@ -24,10 +24,11 @@ public class WorldGenerator : MonoBehaviour
 
     [Header("Trees")]
     [SerializeField] bool scatterTrees = true;
-    [SerializeField] GameObject tree;
+    [SerializeField] Transform tree;
     [SerializeField] int amountPerChunk = 5;
     [SerializeField] int amountVariation = 2;
     [SerializeField] float scaleVariation = 0.75f;
+    [SerializeField][Range(0.0f, 1f)] float colorVariation = 0.2f;
 
     private void Awake()
     {
@@ -147,17 +148,17 @@ public class WorldGenerator : MonoBehaviour
         int size;
         public float cTimeStamp;
         public GameObject chunkObject;
-        WorldGenerator voxelGenerator;
+        WorldGenerator worldGenerator;
         Mesh mesh;
 
         List<Vector3> treeVerticePositions = new List<Vector3>();
 
-        public Chunk(float cTimeStamp, GameObject chunkObject, int size, WorldGenerator voxelGenerator)
+        public Chunk(float cTimeStamp, GameObject chunkObject, int size, WorldGenerator worldGenerator)
         {
             this.cTimeStamp = cTimeStamp;
             this.chunkObject = chunkObject;
             this.size = size;
-            this.voxelGenerator = voxelGenerator;
+            this.worldGenerator = worldGenerator;
 
             mesh = new Mesh();
             chunkObject.GetComponent<MeshFilter>().mesh = mesh;
@@ -178,7 +179,7 @@ public class WorldGenerator : MonoBehaviour
             {
                 for (int x = 0; x <= size; x++)
                 {
-                    float y = GenerateNoise(x + voxelGenerator.offset, z + voxelGenerator.offset, voxelGenerator.detailScale) * voxelGenerator.noiseHeight;
+                    float y = GenerateNoise(x + worldGenerator.offset, z + worldGenerator.offset, worldGenerator.detailScale) * worldGenerator.noiseHeight;
                     vertices[i] = new Vector3(x, y, z);
 
                     // Add chunk position to positions list
@@ -227,7 +228,7 @@ public class WorldGenerator : MonoBehaviour
             mesh.Optimize();
 
             // Spawn trees
-            if (voxelGenerator.scatterTrees)
+            if (worldGenerator.scatterTrees)
             {
                 SpawnTrees();
             }
@@ -243,21 +244,37 @@ public class WorldGenerator : MonoBehaviour
 
         private void SpawnTrees()
         {
-            if (voxelGenerator.amountPerChunk > voxelGenerator.chunkSize)
+            if (worldGenerator.amountPerChunk > worldGenerator.chunkSize)
             {
                 Debug.LogWarning("Amount of trees is greater than chunk size, resetting to default value");
-                voxelGenerator.amountPerChunk = 5;
+                worldGenerator.amountPerChunk = 5;
             }
 
-            int amountOftrees = voxelGenerator.amountPerChunk + Random.Range(-voxelGenerator.amountVariation, voxelGenerator.amountVariation);
+            int amountOftrees = worldGenerator.amountPerChunk + Random.Range(-worldGenerator.amountVariation, worldGenerator.amountVariation);
 
             for (int i = 0; i < amountOftrees; i++)
             {
+                // Random rotation
                 float randomY = Random.Range(0, 360);
-                float randomScale = Random.Range(-voxelGenerator.scaleVariation, voxelGenerator.scaleVariation);
 
-                GameObject spawnedTree = Instantiate(voxelGenerator.tree, GenerateTreeSpawnLocation(), Quaternion.Euler(new Vector3(0, randomY, 0)), chunkObject.transform);
-                spawnedTree.transform.localScale += new Vector3(randomScale, randomScale, randomScale);
+                Transform spawnedTree = Instantiate(worldGenerator.tree, GenerateTreeSpawnLocation(), Quaternion.Euler(new Vector3(0, randomY, 0)), chunkObject.transform);
+
+                // Random tree scale
+                float randomScale = Random.Range(-worldGenerator.scaleVariation, worldGenerator.scaleVariation);
+                spawnedTree.localScale += new Vector3(randomScale, randomScale, randomScale);
+
+                //Random color variation
+                MeshRenderer[] meshRenderers = spawnedTree.GetComponentsInChildren<MeshRenderer>();
+
+                float randomColor = Random.Range(1f - worldGenerator.colorVariation, 1f);
+
+                Material newTreeMaterial = new Material(meshRenderers[0].material);
+                newTreeMaterial.color = new Color(randomColor, randomColor, randomColor, 1);
+
+                foreach (MeshRenderer meshRenderer in meshRenderers)
+                {
+                    meshRenderer.material = newTreeMaterial;
+                }
             }
         }
 
