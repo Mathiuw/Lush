@@ -1,0 +1,66 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1298132545276201859
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5323279876434095050}
+  - component: {fileID: 8610133411308263431}
+  - component: {fileID: 5791527169508936252}
+  m_Layer: 7
+  m_Name: Hallway_Generator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 2147483647
+  m_IsActive: 1
+--- !u!4 &5323279876434095050
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1298132545276201859}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8610133411308263431
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1298132545276201859}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e690f4a7655403409df4305b1eae1b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hallwayPrefab: {fileID: 5590631585868376798, guid: 10bc1635f78bf70488f9bbd4248f8f45, type: 3}
+  hallwayPipes: {fileID: 4801698620522626511, guid: da650263eb298dd4ca0afdb055fb6355, type: 3}
+  hallwayChunkSize: 4
+  hallwayAmount: 6
+  endPrefab: {fileID: 3223673474615859930, guid: 63e355d0d1d65a44b879e684a559c7c1, type: 3}
+  distanceToTriggerEnd: 550
+  alternativeEnding: {fileID: 8438597128534013743, guid: 9c7daf4391cfb794cac0aaf9a3d6cb49, type: 3}
+--- !u!156049354 &5791527169508936252
+Grid:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1298132545276201859}
+  m_Enabled: 1
+  m_CellSize: {x: 4, y: 4, z: 4}
+  m_CellGap: {x: 0, y: 0, z: 0}
+  m_CellLayout: 0
+  m_CellSwizzle: 0

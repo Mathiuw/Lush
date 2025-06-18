@@ -11,10 +11,25 @@ public class UI_Fade : MonoBehaviour
     }
 
     [SerializeField] FadeType fadeType;
-    [SerializeField] Color fadeColor;
-    [SerializeField] float fadeTime = 1;
-    [SerializeField] bool active;
+    float fadeValue = 0.0f;
     RawImage image;
+
+    public float GetFadeValue() 
+    {
+        return fadeValue;
+    }
+
+    public void SetFadeValue(float value)
+    {
+        fadeType = FadeType.Paused;
+
+        value = Mathf.Clamp01(value);
+
+        Color imageColor = image.color;
+        imageColor.a = value;
+
+        image.color = imageColor;
+    }
 
     private void Start()
     {
@@ -27,18 +42,6 @@ public class UI_Fade : MonoBehaviour
         }
     }
 
-    public void SetFadeValue(float value) 
-    {
-        fadeType = FadeType.Paused;
-
-        value = Mathf.Clamp01(value);
-
-        Color imageColor = image.color;
-        imageColor.a = value;
-
-        image.color = imageColor;
-    }
-
     private void Update()
     {
         Color imageColor = image.color;
@@ -46,10 +49,10 @@ public class UI_Fade : MonoBehaviour
         switch (fadeType)
         {
             case FadeType.FadeIn:
-                imageColor.a += Time.deltaTime / fadeTime;
+                imageColor.a += Time.deltaTime;
                 break;
             case FadeType.FadeOut:
-                imageColor.a -= Time.deltaTime / fadeTime;
+                imageColor.a -= Time.deltaTime;
                 break;
             case FadeType.Paused:
                 break;
@@ -57,7 +60,9 @@ public class UI_Fade : MonoBehaviour
                 break;
         }
 
-        imageColor.a = Mathf.Clamp(imageColor.a, 0, 1);
+        imageColor.a = Mathf.Clamp01(imageColor.a);
+
+        fadeValue = imageColor.a;
 
         image.color = imageColor;
     }

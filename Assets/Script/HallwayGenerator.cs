@@ -16,6 +16,7 @@ public class HallwayGenerator : MonoBehaviour
     [Header("End game setting")]
     [SerializeField] Transform endPrefab;
     [SerializeField] uint distanceToTriggerEnd = 100;
+    [SerializeField] HallwayAlternativeEnding alternativeEnding;
     float distanceWalked;
 
     private void Awake()
@@ -97,13 +98,28 @@ public class HallwayGenerator : MonoBehaviour
             // Spawn final room
             // Front
             Vector3 spawnPositionFront = new Vector3(0, 2, ((hallwayAmount + 1) + grid.WorldToCell(playerTransform.position).z) * hallwayChunkSize);
-            Instantiate(endPrefab, spawnPositionFront, Quaternion.Euler(0, 180, 0), transform);
-            Instantiate(hallwayPipes, spawnPositionFront, Quaternion.Euler(0, 0, 0), transform);
+            Transform frontEndPrefab = Instantiate(endPrefab, spawnPositionFront, Quaternion.Euler(0, 180, 0), transform);
+            Instantiate(hallwayPipes, spawnPositionFront, Quaternion.Euler(0, 0, 0), frontEndPrefab);
             // Back
             Vector3 spawnPositionBack = new Vector3(0, 2, ((-hallwayAmount - 1) + grid.WorldToCell(playerTransform.position).z) * hallwayChunkSize);
-            Instantiate(endPrefab, spawnPositionBack, Quaternion.identity, transform);
-            Instantiate(hallwayPipes, spawnPositionBack, Quaternion.Euler(0, 0, 0), transform);
+            Transform backEndPrefab = Instantiate(endPrefab, spawnPositionBack, Quaternion.identity, transform);
+            Instantiate(hallwayPipes, spawnPositionBack, Quaternion.Euler(0, 0, 0), backEndPrefab);
             Debug.Log("Hallway generation ended");
+
+            // get the alternative ending triggers
+            TriggerEndingAlternative frontTriggerEndingAlternative = frontEndPrefab.Find("Alternative_Ending_Trigger").GetComponent<TriggerEndingAlternative>();
+            TriggerEndingAlternative backTriggerEndingAlternative = backEndPrefab.Find("Alternative_Ending_Trigger").GetComponent<TriggerEndingAlternative>();
+
+            // Spawn and set alternative ending manager object
+            HallwayAlternativeEnding alternativeEndingObject = Instantiate(alternativeEnding, Vector3.zero, Quaternion.identity, null);
+            alternativeEndingObject.SetFrontTrigger(frontTriggerEndingAlternative);
+            alternativeEndingObject.SetBackTrigger(backTriggerEndingAlternative);
+
+            // Set other trigger
+            frontTriggerEndingAlternative.SetOtherTrigger(backTriggerEndingAlternative);
+            backTriggerEndingAlternative.SetOtherTrigger(frontTriggerEndingAlternative);
+
+            Debug.Log("Spawned alternative ending");
 
             enabled = false;
         }

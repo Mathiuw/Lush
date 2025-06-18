@@ -15,10 +15,6 @@ public class UI_Menu : MonoBehaviour
     [Header("Widescreen")]
     [SerializeField] Toggle widescreenToggle;
     [SerializeField] Transform borders;
-    //[Header("Timer")]
-    //[SerializeField] LocalizedString localStringElapsedTime;
-    //[SerializeField] TextMeshProUGUI timerText;
-    //Timer timer;
 
     CanvasGroup canvasGroup;
     Player player;
@@ -30,8 +26,6 @@ public class UI_Menu : MonoBehaviour
 
     private void OnDisable()
     {
-        //localStringElapsedTime.StringChanged -= UpdateText;
-
         if (player)
         {
             player.GetInput().Player.Exit.performed -= ToggleMenu;
@@ -63,39 +57,9 @@ public class UI_Menu : MonoBehaviour
             enabled = false;
         }
 
-        // Searches for timer class
-        //timer = FindAnyObjectByType<Timer>();
-
-        //if (!timer)
-        //{
-        //    Debug.LogError("Cant find timer");
-        //}
-        //else
-        //{
-        //    // Set the argument for the timer text
-        //    localStringElapsedTime.Arguments = new object[] { timer.GetElapsedTime() };
-        //    localStringElapsedTime.StringChanged += UpdateText;
-        //    StartCoroutine(UpdateTimer());
-        //}
-
         // Tries to load saved settings
         LoadGame();
     }
-
-    //IEnumerator UpdateTimer()
-    //{
-    //    while (true)
-    //    {
-    //        Updates timer text
-    //        int elapsedTime = Mathf.FloorToInt(timer.GetElapsedTime());
-
-    //        int minutes = elapsedTime / 60;
-    //        int seconds = elapsedTime % 60;
-    //        localStringElapsedTime.Arguments[0] = string.Format("{0:00}:{1:00}", minutes, seconds);
-    //        localStringElapsedTime.RefreshString();
-    //        yield return new WaitForSeconds(0.1f);
-    //    }
-    //}
 
     // Open and close menu
     private void ToggleMenu(InputAction.CallbackContext context)
@@ -187,11 +151,6 @@ public class UI_Menu : MonoBehaviour
         SaveGame();
         changeLanguageActive = false;
     }
-    
-    //private void UpdateTimerText(string value)
-    //{
-    //    timerText.text = value;
-    //}
 
     // Game data functions
 

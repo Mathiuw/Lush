@@ -27,21 +27,21 @@ public class Player : MonoBehaviour
     [Header("Camera Movement")]
     [SerializeField] float sensibility = 20f;
     [SerializeField] Transform headPivot;
-    Transform playerCamera;
     Vector2 lookInput = Vector2.zero;
     float xlookRotation = 0f;
+    float yBodyRotation = 0f;
 
     // Head bob variables
     [Header("Head Bob")]
     [SerializeField] bool headBob = true;
     [SerializeField] float amplitude = 0.1f; 
     [SerializeField] float frequency = 2f;
+    [SerializeField] bool bobX = false, bobY = true;
     float bobTime = 0f;
 
     // Sound Variables
     [Header("Audio")]
     [SerializeField] float footstepFadeSpeed = 10;
-    //[SerializeField] FootStepSound[] footStepSounds;
     AudioSource footstepSoundSource;
     float maxVolume;
 
@@ -119,9 +119,6 @@ public class Player : MonoBehaviour
         // Lock Cursor
         Cursor.lockState = CursorLockMode.Locked;
 
-        // Get camera transform
-        playerCamera = GetComponentInChildren<Camera>().transform;
-
         // Get character controller component
         characterController = GetComponent<CharacterController>();
 
@@ -146,9 +143,6 @@ public class Player : MonoBehaviour
             // Apply camera movement
             CameraMovement();
         }
-        
-        // Apply player movement
-        PlayerMovement();
 
         velocity = new Vector3(characterController.velocity.x, 0, characterController.velocity.z);
 
@@ -157,8 +151,11 @@ public class Player : MonoBehaviour
         {
             bobTime += velocity.magnitude * Time.deltaTime;
 
-            playerCamera.localPosition = HeadBob(bobTime);
+            headPivot.localPosition = HeadBob(bobTime);
         }
+
+        // Apply player movement
+        PlayerMovement();
 
         //SetFootstepSound();
         FootstepAudioVolume();
@@ -192,12 +189,13 @@ public class Player : MonoBehaviour
         float mouseY = lookInput.y * sensibility;
 
         xlookRotation -= mouseY * Time.deltaTime;
+        yBodyRotation += mouseX * Time.deltaTime;
 
         // Clamp x rotation value
         xlookRotation = Math.Clamp(xlookRotation, -89, 89);
 
-        transform.Rotate(Vector3.up * (mouseX * Time.deltaTime));
-        playerCamera.localRotation = Quaternion.Euler(xlookRotation, 0, 0);
+        transform.localRotation = Quaternion.Euler(0, yBodyRotation, 0);
+        headPivot.localRotation = Quaternion.Euler(xlookRotation, 0, 0);
     }
 
     public void FocusPlayerCamera(Transform target) 
@@ -211,15 +209,23 @@ public class Player : MonoBehaviour
         transform.rotation = Quaternion.Euler(new Vector3(bodyRotation.eulerAngles.x, transform.rotation.eulerAngles.y, bodyRotation.eulerAngles.z));
 
         // Rotate the camera to the target
-        playerCamera.LookAt(target);
+        headPivot.LookAt(target);
         Debug.Log("Player focusing on target");
     }
 
     private Vector3 HeadBob(float time)
     {
         Vector3 position = Vector3.zero;
-        position.y += Mathf.Sin(time * frequency) * amplitude;
-        //position.x += Mathf.Cos(time * frequency / 2) * amplitude;
+
+        if (bobX)
+        {
+            position.x += Mathf.Cos(time * frequency / 2) * amplitude;
+        }
+        if (bobY) 
+        {
+            position.y += Mathf.Sin(time * frequency) * amplitude;
+        }
+
         return position;
     }
 
