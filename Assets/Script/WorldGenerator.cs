@@ -12,7 +12,6 @@ public class WorldGenerator : MonoBehaviour
 
     [Header("Terrain")]
     [SerializeField] GameObject chunk;
-    [SerializeField] PhysicsMaterial terrainMaterial;
     [SerializeField] int worldSize = 3;
     [SerializeField] int noiseHeight = 5;
     [SerializeField] float detailScale = 8;
@@ -90,9 +89,6 @@ public class WorldGenerator : MonoBehaviour
 
                     // set chunk prefab layer to "Ground"
                     chunkPrefab.layer = 7;
-
-                    // set terrain material
-                    chunkPrefab.GetComponent<Collider>().material = terrainMaterial;
 
                     Chunk chunk = new Chunk(cTime, chunkPrefab, chunkSize, this);
 

@@ -408,8 +408,8 @@ MonoBehaviour:
   groundMask:
     serializedVersion: 2
     m_Bits: 129
-  sphereRadius: 0.2
-  sphereOffset: 0.03
+  sphereRadius: 0.3
+  sphereOffset: 0.12
   sensibility: 20
   headPivot: {fileID: 3753879737632772397}
   headBob: 1
