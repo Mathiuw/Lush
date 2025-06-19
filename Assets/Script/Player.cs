@@ -11,10 +11,10 @@ public class Player : MonoBehaviour
     [Header("Player Movement")]
     [SerializeField] float speed = 5f;
     [SerializeField] float gravity = -9.81f;
+    float gravityVelocity = 0;
     CharacterController characterController;
     Vector2 MoveInput = Vector2.zero;
     Vector3 MoveDirection = Vector3.zero;
-    Vector3 gravityVelocity = Vector3.zero;
     Vector3 velocity = Vector3.zero;
 
     [Header("Ground Check")]
@@ -163,24 +163,35 @@ public class Player : MonoBehaviour
 
     private void PlayerMovement() 
     {
+        // Movement
+        MoveDirection = (transform.forward * MoveInput.y + transform.right * MoveInput.x).normalized * speed;
+
         // Gravity
-        grounded = Physics.CheckSphere(transform.position + Vector3.down + Vector3.up * sphereOffset, sphereRadius, groundMask);
+        //grounded = Physics.CheckSphere(transform.position + Vector3.down + Vector3.up * sphereOffset, sphereRadius, groundMask);
+
+        grounded = Physics.Raycast(transform.position, Vector3.down, 1.2f, groundMask);
+        Debug.DrawRay(transform.position, Vector3.down * 1.2f, Color.green);
+
+        //grounded = characterController.isGrounded;
 
         if (!grounded)
         {
-            gravityVelocity.y += gravity * Time.deltaTime;
+            gravityVelocity += gravity * Time.deltaTime;
+            //MoveDirection.y += gravity * Time.deltaTime; 
+            // gravityVelocity.y += gravity * Time.deltaTime;
         }
         else
         {
-            gravityVelocity.y = -2;
+            gravityVelocity = -2f;
+            //MoveDirection.y = 0.5f;
+            //gravityVelocity.y = 0;
         }
 
-        characterController.Move(gravityVelocity * Time.deltaTime);
+        MoveDirection.y = gravityVelocity;
 
-        // Movement
-        MoveDirection = transform.forward * MoveInput.y + transform.right * MoveInput.x;
+        //characterController.Move(gravityVelocity * Time.deltaTime);
 
-        characterController.Move(speed * Time.deltaTime * MoveDirection.normalized);
+        characterController.Move(MoveDirection * Time.deltaTime);
     }
 
     private void CameraMovement()

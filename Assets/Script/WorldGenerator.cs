@@ -221,7 +221,7 @@ public class WorldGenerator : MonoBehaviour
 
             mesh.RecalculateNormals();
             mesh.RecalculateBounds();
-            mesh.Optimize();
+            //mesh.Optimize();
 
             // Spawn trees
             if (worldGenerator.scatterTrees)
